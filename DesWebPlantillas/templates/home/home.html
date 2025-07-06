@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Soy el Italiano</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+    h1 {
+      font-size: 3em;
+      margin: 0 0 20px;
+      color: #ffcc00;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+    p {
+      font-size: 1.2em;
+      margin: 0;
+    }
+    a.button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 24px;
+      background: #ffcc00;
+      color: #333;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    a.button:hover {
+      background: #ffdb4d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Soy el Italiano 🇮🇹</h1>
+    <p>¡Bienvenido a mi página personal! Aquí comparto mis proyectos y pasiones.</p>
+    <a class="button" href="#">Descubre más</a>
+    {{define "gophercoffe"}}
+    <img src="/recursos/images/gophercoffe.png" alt="gophercoffe" width="300" height="300"/>
+    {{end}}
+  </div>
+</body>
+</html>

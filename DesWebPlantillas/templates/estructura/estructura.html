@@ -1,0 +1,42 @@
+<h1>Pagina de estructura</h1>
+
+<h3>Declarar variables</h3>
+{{with $valor:="Mi valor de prueba"}}
+<p>He declarado el valor: {{$valor}}</p>
+{{end}} <!-- Sin el end final falla la aplicacion -->
+
+ <!-- Acceder a los datos pasados a traves de la estructura -->
+<h3>Datos recibidos:</h3>
+<ul>
+    <li>Nombre: {{.Nombre}}</li> <!-- Hay que llamar directament el parametro  de la estructura  Datos.Nombre -> Llamamos .Nombre -->
+    <li>Edad: {{.Edad}}</li> 
+    <li>Profesion: {{.Profesion}}</li> 
+    <hr/>
+    <!-- Condiciones --> <!-- if operador valor1 valor2  -->
+    <h3>Condicioles:</h3>
+     
+    {{ if ge .Edad 18 }}
+        <p>Eres mayor de edad</p>
+     {{else}}
+     <p>Eres menor de edad</p>
+     {{end}}
+
+    {{ if eq .Profesion "Informatico" }}
+        <p>Eres {{.Profesion}}</p>
+    {{else}}
+        <p>No eres Informatico</p>
+    {{end}}
+    {{ if and (eq .Profesion "Informatico") (ge .Edad 2) }} <!-- Mas de una condicion -->
+        <p>Ha funcionado</p>
+    {{ else }}
+        <p>No ha funcionado</p>
+    {{ end }}
+    <hr/>
+    <h3>Habilidades:</h3>
+    {{.Skills}}
+    <ul>
+        {{range .Skills}}
+            <li>{{.Tecn}}</li>
+        {{end}}
+    </ul>
+    

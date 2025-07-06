@@ -1,0 +1,18 @@
+<head>
+    <link rel="stylesheet" href="/recursos/css/estiloquerystring.css">
+</head>
+<h1 class="clase_rojo">Pagina que recibe parametros como query strings</h1>
+<p>https://192.168.0.14:8443/paramtrosquerystring?edad=tuedad&nombre=tunombre</p>
+<ul>
+    <li>
+        edad: {{.edad}}
+    </li>
+    <li>
+        nombre: {{.nombre}}
+    </li>
+</ul>
+
+<p>{{.basemsg}} {{.nombre}} y tengo {{.edad }} de edad </p>
+
+<img src="/recursos/images/gophercoffe.png" alt="gophercoffe" width="300" height="300" onclick="saludar();">
+<script src="/recursos/js/funciones.js"></script>
