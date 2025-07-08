@@ -1,0 +1,54 @@
+{{define "formularioget"}}
+{{template "header"}}
+<link rel="stylesheet" href="/recursos/public/css/formulario.css">
+
+<!--Formulario-->
+<main>
+
+    <div>
+            
+    <form action="/tratar-from-datos" method="POST">
+        <div class="form-group">
+            <label for="nombre">Nombre: </label>
+            <input type="text" name="nombre" size="40" id="nombre" class="form-control" placeholder="Nombre: ">
+        </div>
+        <div class="form-group">
+            <label for="correo">Correo: </label>
+            <input type="text" name="correo" size="40" id="correo" class="form-control" placeholder="Email: ">
+        </div>
+        <div class="form-group">
+            <label for="passwd">Password: </label>
+            <input type="password" name="passwd" size="40" id="passwd" class="form-control" placeholder="Password: ">
+        </div>
+        <input type="radio" name="hm" value="h"> Hombre
+        <input type="radio" name="hm" value="m"> Mujer
+        </p>
+        <p>
+        <input type="submit" value="Enviar">
+        <input type="reset">
+        </p>
+    </form>
+    </div>
+    
+</main>
+<div class="home-button">
+    <a class="button" href="/">Home</a>
+    <a class="button" href="/formulario/uploads">Uploads</a>
+  </div>
+
+  {{ if ne .css "" }}
+  <div class="alert alert-{{.css}} alert-dismissible fade show mt-3" role="alert">
+      {{.mensaje}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <script src="/recursos/public/js/bootstrap.js"></script>
+<script type="text/javascript" src="/recursos/public/js/sweetalert2.js"></script>
+<script type="text/javascript" src="/recursos/public/js/funciones.js"></script>
+<script src="/recursos/public/js/jquery-2.0.0.min.js"></script>
+  
+{{end}}
+{{template "footer"}}
+{{end}}
+
+
+

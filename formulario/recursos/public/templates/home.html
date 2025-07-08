@@ -1,0 +1,17 @@
+
+{{define "home"}}
+{{template "header"}}
+<link rel="stylesheet" href="/recursos/public/css/estilohome.css">
+<title>Soy el Italiano</title>
+<body>
+    <div class="container">
+      <h1>Soy el Italiano 🇮🇹</h1>
+      <p>¡Bienvenido a mi página personal! Aquí comparto mis proyectos y pasiones.</p>
+      
+      <img src="/recursos/public/images/gophercoffe.png" alt="gophercoffe" width="300" height="300" onclick="quejagophercoffe();"/>
+      <div><a class="button" href="/formulario">Formulario</a></div>
+      <script src="/recursos/public/js/saludogophercoffe.js"></script>    
+
+    </div>
+{{template "footer"}}
+{{end}}
