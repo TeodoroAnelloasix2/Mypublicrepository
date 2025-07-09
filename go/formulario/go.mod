@@ -10,4 +10,5 @@ require (
 require (
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/gorilla/sessions v1.4.0 // indirect
+	github.com/jung-kurt/gofpdf v1.16.2 // indirect
 )

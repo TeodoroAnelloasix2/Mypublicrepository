@@ -1,0 +1,11 @@
+{{define "flash"}}
+{{ if .css }}
+<div class="alert alert-{{.css}} alert-dismissible fade show mt-3" role="alert">
+    {{.mensaje}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" ></button>
+</div>
+<script type="text/javascript" src="/recursos/public/js/sweetalert2.js"></script>
+<script type="text/javascript" src="/recursos/public/js/funciones.js"></script>
+<script src="/recursos/public/js/jquery-2.0.0.min.js"></script>
+{{ end }}
+{{end}}

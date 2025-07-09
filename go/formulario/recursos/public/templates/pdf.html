@@ -1,0 +1,26 @@
+{{define "pdfpage"}}
+{{template "header"}}
+<!-- 
+{{ if ne .css "" }}
+<div class="alert alert-{{.css}} alert-dismissible fade show mt-3" role="alert">
+    {{.mensaje}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+{{end}} -->
+<main class="container">
+    <h1>PDF generator</h1>
+    <a href="/pdf-gen" class="btn btn-danger">Crear Pdf un de prueba</a>    
+   
+</main>
+
+<div class="volveratraspdf"> 
+    <button><a href="/utilidades/excel">excel</a></button>
+    <button><a href="/utilidades/qr">qr</a></button>
+</div>
+<link rel="stylesheet" href="/recursos/public/css/bootstrap.min.css">
+
+
+{{template "flash" .}}
+{{template "footer"}}
+{{end}}

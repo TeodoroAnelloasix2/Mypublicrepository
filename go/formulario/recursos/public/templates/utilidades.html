@@ -1,0 +1,14 @@
+{{define "utilidadespage"}}
+{{template "header"}}
+
+
+    <main class="container">
+        <h1>Utilidades para exportar datos</h1>
+       <button><a href="/utilidades/pdf">pdf</a></button> 
+        <button><a href="/utilidades/excel">excel</a></button>
+        <button><a href="/utilidades/qr">qr</a></button>
+    </main>
+
+    {{template "flash" .}}
+{{template "footer"}}
+{{end}}
