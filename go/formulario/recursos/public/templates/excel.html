@@ -1,0 +1,29 @@
+{{define "excelpage"}}
+
+{{template "header"}}
+
+<main class="container">
+    <h1>Excel generator</h1>
+    <p style="color: navy; font-style: italic;">
+        Test para comprobar la generacion del excel, verás un mensaje de confirmación.
+    </p>    
+    <a href="/excel-gen-test" class="btn btn-danger">Exportar excel</a>    
+    <hr>
+    <a href="/excel-gen-clientes" class="btn btn-danger">Exportar excel Clientes</a>    
+    <hr>
+    <a href="/excel-download" class="btn btn-danger">Descargar excel Clientes</a>    
+    <hr>
+</main>
+
+<div class="volveratraspdf"> 
+    <button><a href="/utilidades/pdf">pdf</a></button>
+    <button><a href="/utilidades/qr">qr</a></button>
+</div>
+
+<div> <button><a href="/">Home</a></button></div>
+<link rel="stylesheet" href="/recursos/public/css/bootstrap.min.css">
+
+
+{{template "flash" .}}
+{{template "footer"}}
+{{end}}

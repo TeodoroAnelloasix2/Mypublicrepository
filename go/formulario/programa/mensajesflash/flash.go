@@ -23,7 +23,7 @@ func RetornaMensajeFlash(w http.ResponseWriter, r *http.Request) (string, string
 	if fm2 := session.Flashes("mensaje"); len(fm2) > 0 {
 		css_mensaje = fm2[0].(string)
 	}
-	_ = session.Save(r, w) // Solo una vez
+	_ = session.Save(r, w)
 	return css_mensaje, css_session
 }
 
