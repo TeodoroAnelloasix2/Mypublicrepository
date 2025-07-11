@@ -83,12 +83,12 @@ func GetPayloadEmail(asunto, cuerpo string) *map[string]any {
 		},
 		"to": []map[string]string{
 			{
-				"email": "gopycodewar@gmail.com",
-				"name":  "italianodev",
+				"email": "ejemplo@gmail.com",
+				"name":  "ejemplo2",
 			},
 			{
-				"email": "teodoro.anello.job@gmail.com",
-				"name":  "teodoro",
+				"email": "ejemplo.job@gmail.com",
+				"name":  "ejemplo",
 			},
 		},
 		"subject": asunto,
