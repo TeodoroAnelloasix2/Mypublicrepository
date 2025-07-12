@@ -1,0 +1,9 @@
+services:
+  svc-apache:
+    image: httpd
+    ports:
+      - "8080:80"
+  svc-tomcat:
+    image: tomcat
+    ports:
+      - "8081:8080"
