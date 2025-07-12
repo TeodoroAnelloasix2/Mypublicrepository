@@ -66,8 +66,17 @@ Successfully created context "docker-desa"
 docker context use docker-desa 
 docker-desa
 Current context is now "docker-desa"
-
 docker context inspect docker-desa
+docker context use default #Volver al contexto por defecto
+```
 
- docker context use default #Volver al contexto por defecto
+# Usar server docker desde un cliente
+
+```shell
+#Crear juegos de llaves ssh para autenticarse
+ssh-keygen .....opciones
+ssh-copy-id -i llave user@host
+#Desde el cliente 
+docker context create nombre-context --docker host=ssh://user@host
+docker context use nombre-context
 ```
