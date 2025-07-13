@@ -1,0 +1,30 @@
+services:
+  gobbdd:
+    build: 
+      context: ./Mysql/dockerBBDD
+      dockerfile: dockerfile
+    env_file:
+      - ./Mysql/dockerBBDD/mysql.properties
+    ports:
+      - "3306:3306"
+    networks:
+      - appgo_network
+  myappgolang:
+    build: 
+      context: ./Mysql/
+      dockerfile: dockerfile
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
+    env_file:
+      - ./Mysql/Programa/.env
+    depends_on:
+      - gobbdd
+    networks:
+      - appgo_network
+
+networks:
+  appgo_network:
+    name: appgo_network
+    driver: bridge
+

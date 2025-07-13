@@ -1,0 +1,25 @@
+#Compilar 
+FROM golang:1.24.1 AS builder
+
+WORKDIR /appgo
+
+COPY ./Programa/go.mod ./Programa/go.sum ./
+
+RUN go mod download
+
+COPY ./Programa/ .
+
+RUN go build -o myapp  ./main/main.go
+
+
+#Desplegar contenedor ligero
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+COPY --from=builder /appgo/myapp .
+
+COPY ./Programa/.env .
+
+
+CMD [ "./myapp" ]
