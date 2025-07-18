@@ -1,0 +1,52 @@
+{{define "rampage"}}
+{{template "header"}}
+<link rel="stylesheet" href="/recursos/public/css/ram.css">
+<h1>Ram Recursos</h1>
+<table>
+    <tr>
+        <th>Total</th>
+        <th>Libre </th>
+        <th>Disponible </th>
+        <th>Swap Total </th>
+        <th>Swap libre</th>
+        <th>Cache </th>
+        <th>Swap Cache</th>
+    </tr>
+    <tr>
+        <td>{{.MemTotal}} </td>
+        <td>{{.MemFree}} </td>
+        <td>{{.MemAvailable}} </td>
+        <td>{{.SwapTotal}} </td>
+        <td>{{.SwapFree }} </td>
+        <td>{{.Cached}} </td>
+        <td>{{ .SwapCached}} </td>
+
+    </tr>
+</table>
+<div class="flex-container">
+<div class="leyenda-memoria">
+    <h4>Leyenda de los campos de memoria</h4>
+    <ul>
+      <li><strong>Total:</strong> Memoria física total del sistema (RAM instalada), en kilobytes.</li>
+      <li><strong>Libre:</strong> Memoria RAM completamente libre, no utilizada ni reservada.</li>
+      <li><strong>Disponibile:</strong> Estimación de memoria disponible para nuevos procesos, sin necesidad de swap.</li>
+      <li><strong>Swap Total:</strong> Tamaño total del espacio de swap configurado (en disco), en kilobytes.</li>
+      <li><strong>Swap libre:</strong> Espacio libre en el área de swap, en kilobytes.</li>
+      <li><strong>Cache:</strong> Memoria usada como caché de archivos abiertos. Liberable si se requiere.</li>
+      <li><strong>Swap Cache:</strong> Parte del swap que ya fue cargada en RAM, pero aún se mantiene en disco.</li>
+    </ul>
+  </div>
+  
+<div id="ramdata"  
+     data-memtotal="{{.MemTotal}}"
+     data-memfree="{{.MemAvailable}}"> <!--Creamos los datos para el grafico de Js-->
+</div>
+<div style="width: 500px">
+	<canvas id="grafica"></canvas>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/recursos/public/js/graficoram.js"></script>
+{{template "footer"}}
+{{end}}
+

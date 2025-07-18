@@ -1,0 +1,49 @@
+/* Estilo base */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  /* Header */
+  .header {
+    background-color: #316fc7; /* gris oscuro */
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(179, 177, 177, 0.1);
+    
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    color: #08090c;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .nav {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    background-color: #374151; /* un tono más claro de gris */
+  }
+  

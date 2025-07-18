@@ -1,0 +1,14 @@
+{{define "home"}}
+{{template "header"}}
+<link rel="stylesheet" href="/recursos/public/css/home.css?v=1">
+    <div class="home-container">
+      <h1 class="fondo-titulo" style="color:black">GOSPY</h1>
+      <p>Consulta el estado de la CPU y de la memoria de tu sistema.</p>
+    </div>
+
+    <div class="botones">
+      <a href="/cpu" class="boton-principal">Ver CPU</a>
+      <a href="/ram" class="boton-principal">Ver Memoria</a>
+    </div>
+{{template "footer"}}
+{{end}}
