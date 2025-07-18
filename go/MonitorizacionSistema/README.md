@@ -37,7 +37,65 @@ Saca la información de:
 ### HTML y CSS
 - Para la web
 
+## Estructura
+```
+.
+├── go.mod
+├── go.sum
+├── image
+│   └── README
+│       ├── 1752856731563.png
+│       ├── 1752856968684.png
+│       ├── 1752856988057.png
+│       └── 1752857001935.png
+├── main.go
+├── package.json
+├── programa
+│   ├── cargarvariables
+│   │   └── cargarvariables.go
+│   ├── models
+│   │   └── models.go
+│   ├── server
+│   │   ├── cargarutas.go
+│   │   ├── handlers.go
+│   │   └── server.go
+│   └── sysinfo
+│       ├── cpuinfo.go
+│       └── memraminfo.go
+├── README.md
+├── recursos
+│   ├── certs
+│   │   ├── sysinfo.crt
+│   │   └── sysinfo.key
+│   └── public
+│       ├── css
+│       │   ├── cpu.css
+│       │   ├── footer.css
+│       │   ├── header.css
+│       │   ├── home.css
+│       │   └── ram.css
+│       ├── images
+│       │   ├── cpu2.jpeg
+│       │   ├── cpugospy.png
+│       │   ├── cpuimage.jpeg
+│       │   ├── gopher404.jpg
+│       │   ├── gopher.jpeg
+│       │   ├── homegospy.png
+│       │   └── ramgospy.png
+│       ├── js
+│       │   └── graficoram.js
+│       └── templates
+│           ├── cpu.html
+│           ├── footer.html
+│           ├── header.html
+│           ├── home.html
+│           ├── page404.html
+│           └── ram.html
+├── runner.conf
+└── tmp
+    └── runner-build
 
+```
 ### 💡 Notas
 
     Este proyecto fue creado como herramienta educativa y de práctica. Está pensado para correr en entornos Linux, ya que utiliza /proc/.
