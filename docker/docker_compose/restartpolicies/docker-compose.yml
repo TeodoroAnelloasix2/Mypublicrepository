@@ -1,0 +1,19 @@
+services:
+  contenedor1:
+    build: .
+    image: imagen-restart
+    restart: unless-stopped # Siempre a menos que se pare manualmente
+    command: ["/pararscript/script.sh"]
+  contenedor2:
+    image: imagen-restart
+    restart: always # Reiniciar siempre
+    command: ["/pararscript/script.sh"]
+  contenedor3:
+    image: imagen-restart
+    restart: on-failure:3  # Cuando falle, maximo 3 veces
+    command: ["/pararscript/script.sh"]
+  contenedor4:
+    image: imagen-restart 
+    restart: "no" # No se reinicia
+    command: ["/pararscript/script.sh"]
+
