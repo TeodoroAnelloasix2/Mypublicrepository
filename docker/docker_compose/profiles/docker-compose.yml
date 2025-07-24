@@ -1,0 +1,76 @@
+# docker compose --profile profile_name up 
+
+services:
+  wordpress:
+    image: wordpress
+    container_name: wordpress1
+    restart: always
+    ports:
+      - 9090:80
+    environment:
+      WORDPRESS_DB_HOST: db-host
+      WORDPRESS_DB_USER: wp-user 
+      WORDPRESS_DB_PASSWORD: lepanto
+      WORDPRESS_DB_NAME: wp-db
+    networks:
+      - wp-network
+    profiles:
+      - desarrollo
+      - produccion
+
+
+
+###### BBDD Desarrollo ############
+  db-wp-des:
+    image: mysql
+    container_name: bbdd-des
+    restart: always
+    environment:
+      MYSQL_DATABASE: wp-db
+      MYSQL_USER: wp-user
+      MYSQL_PASSWORD: lepanto
+      MYSQL_ROOT_PASSWORD: lepanto
+    networks:
+      wp-network:
+        aliases:
+          - db-host
+    profiles:
+      - desarrollo #Configurar perfil
+    
+
+###### BBDD Produccion #####
+  db-wp-prod:
+    image: mysql
+    container_name: bbdd-prod
+    restart: always
+    environment:
+      MYSQL_DATABASE: wp-db
+      MYSQL_USER: wp-user
+      MYSQL_PASSWORD: lepanto
+      MYSQL_ROOT_PASSWORD: lepanto
+    networks:
+      wp-network:
+        aliases:
+          - db-host
+    profiles:
+      - produccion #Configurar perfil
+
+networks:
+  wp-network:
+    driver: bridge
+
+# docker compose --profile desarrollo up
+#docker ps
+#CONTAINER ID   IMAGE       COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+#82f4a7f71d5c   wordpress   "docker-entrypoint.s…"   26 seconds ago   Up 25 seconds   0.0.0.0:9090->80/tcp, [::]:9090->80/tcp   wordpress1
+#7d0bf67fc7c0   mysql       "docker-entrypoint.s…"   26 seconds ago   Up 25 seconds   3306/tcp, 33060/tcp                       bbdd-des
+
+# Se ha levantado el contenedor de desarrollo
+
+
+#  docker compose --profile produccion up
+
+# docker ps
+# CONTAINER ID   IMAGE       COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+# c85a624f383e   mysql       "docker-entrypoint.s…"   23 seconds ago   Up 23 seconds   3306/tcp, 33060/tcp                       bbdd-prod
+# 82f4a7f71d5c   wordpress   "docker-entrypoint.s…"   2 minutes ago    Up 23 seconds   0.0.0.0:9090->80/tcp, [::]:9090->80/tcp   wordpress1

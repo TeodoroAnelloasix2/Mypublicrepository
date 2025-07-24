@@ -1,0 +1,36 @@
+services:
+  apache-stress:
+    build: .
+    image: apache-stress:1.0.0
+    container_name: apachestress1
+    ports:
+      - "8080:80"
+    cpu_count: 1
+    cpu_shares: 512
+    mem_limit: 100m
+    command: ["/apachescript/apache.sh"]
+  apache-stress2:
+    image: apache-stress:1.0.0
+    container_name: apachestress2
+    ports:
+      - "8090:80"
+    cpu_count: 1
+    cpu_shares: 1024
+    mem_limit: 200m
+    depends_on:
+      - apache-stress
+    command: ["/apachescript/apache.sh"]
+
+#docker ps
+# CONTAINER ID   IMAGE                 COMMAND                  CREATED              STATUS              PORTS                                     NAMES
+# 42d0a16fb3cd   apache-stress:1.0.0   "/apachescript/apach…"   About a minute ago   Up About a minute   0.0.0.0:8090->80/tcp, [::]:8090->80/tcp   apachestress2
+# 4ad3419f6add   apache-stress:1.0.0   "/apachescript/apach…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   
+
+
+#  docker exec -it apachestress2 bash
+# root@42d0a16fb3cd:/apachescript# stress -c 10
+# stress: info: [89] dispatching hogs: 10 cpu, 0 io, 0 vm, 0 hdd
+
+#  CONTAINER ID	NAME	CPU %	MEM USAGE / LIMIT	MEM %	NET I/O	BLOCK I/O	PIDS
+#  42d0a16fb3cd	apachestress2	236.55%	8.64MiB / 200MiB	4.32%	4.92kB / 808B	283kB / 16.4kB	69
+#  4ad3419f6add	apachestress1	131.04%	8.68MiB / 100MiB	8.68%	5.09kB / 808B	336kB / 16.4kB	69

@@ -1,0 +1,11 @@
+FROM ubuntu 
+
+WORKDIR ./apachescript
+
+RUN apt update && sleep 1 && apt install stress apache2 -y
+
+ADD apache.sh .
+
+RUN chmod +x apache.sh
+
+CMD ["echo","Imagen con stress y apache2"]

@@ -1,0 +1,22 @@
+services:
+  web-apache:
+    build: .
+    image: comando:latest
+    container_name: apache1
+    ports:
+      - "8090:80"
+    command: ["/usr/local/bin/apache.sh"] # Command lanza el comando deseado en el contenedor
+    profiles:
+      - apache1
+  web-nginx:
+    build: .
+    image: comando:latest
+    container_name: nginx1
+    ports:
+      - "8080:80"
+    command: ["/usr/local/bin/nginx.sh"] # Lanzar el comando deseado
+    profiles: 
+      - nginx1
+
+# Antes necesitqmos construir la imagen:  docker compose build web-apache
+# docker compose --profile profile up

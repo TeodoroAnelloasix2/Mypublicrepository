@@ -1,0 +1,27 @@
+services:
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 9090:80
+    environment:
+      WORDPRESS_DB_HOST: db-wp1  #Tiene que coincidir con el servicio del host que aloja la bbdd
+      WORDPRESS_DB_USER: wp-user 
+      WORDPRESS_DB_PASSWORD: lepanto
+      WORDPRESS_DB_NAME: wp-db
+    depends_on:
+      - db-wordpress
+    volumes:
+      - /home/itachi/Personal/wp1_volume:/var/www/html #/ruta/sistema:/ruta/contenedor
+  
+  db-wordpress:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: wp-user
+      MYSQL_PASSWORD: lepanto
+      MYSQL_DATABASE: wp-db
+    volumes:
+      - /home/itachi/Personal/db1_volume:/var/lib/mysql
+  
