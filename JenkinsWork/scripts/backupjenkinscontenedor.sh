@@ -6,6 +6,9 @@ if [[ $1 = '/var' ]];then
 elif [[ $1 = '/null' ]];then
 	echo "No se hace copia de seguridad"
 	exit 0
+else
+    echo "El primer parametro es incorrecto!"
+    exit 1
 fi
 
 if [[ "$2" == "true" ]];then
