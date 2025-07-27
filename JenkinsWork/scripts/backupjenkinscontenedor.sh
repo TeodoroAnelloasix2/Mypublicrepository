@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Script para automatizar la copia de seguridad del volume de docker de jenkins
-cd "/home/itachi/Personal/github_jobapplication/principal/JobApplications/JenkisWork" || {
+cd "/var" || {
     echo "No se pudo cambiar al directorio de trabajo especificado"
     exit 1
 }
