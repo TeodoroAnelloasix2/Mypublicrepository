@@ -3,12 +3,18 @@ job('ejemplo-dsl') {
   scm{
     git('https://github.com/TeodoroAnelloasix2/Mypublicrepository.git','main'){ node ->
       node / gitConfigName('Teodoro Anello')
-            node / gitConfigEmail('giacomoeneldo@gmail.com')
+      node / gitConfigEmail('giacomoeneldo@gmail.com')
     }
   }
   parameters{
     booleanParam('ejecutar',false)
     stringParam('comando',defaultValue='hostname',description='Comando extra a ejecutar!')
-  	choiceParam('path',['/var','/null'])
+  	choiceParam('ruta',['/var','/null'])
+  }
+  triggers {
+      cron('H/10 * * * *')
+  }
+  steps{
+    shell('JenkinsWork/scripts/backupjenkinscontenedor.sh "$ruta" "$ejecutar" "$comando"')
   }
 }
