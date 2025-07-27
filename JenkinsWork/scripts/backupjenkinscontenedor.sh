@@ -1,7 +1,14 @@
 #!/bin/bash
 
+if [[ $1 = '/var' ]];then
+	echo "Se hace copia del volume"
+elif [[ $1 = '/null' ]];then
+	echo "No se hace copia de seguridad"
+	exit 0
+fi
+
 #Script para automatizar la copia de seguridad del volume de docker de jenkins
-cd "/var" || {
+cd "$1" || {
     echo "No se pudo cambiar al directorio de trabajo especificado"
     exit 1
 }
