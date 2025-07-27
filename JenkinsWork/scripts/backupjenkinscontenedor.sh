@@ -1,10 +1,15 @@
 #!/bin/bash
 
+
 if [[ $1 = '/var' ]];then
 	echo "Se hace copia del volume"
 elif [[ $1 = '/null' ]];then
 	echo "No se hace copia de seguridad"
 	exit 0
+fi
+
+if [[ "$2" == "true" ]];then
+	echo $($3)
 fi
 
 #Script para automatizar la copia de seguridad del volume de docker de jenkins
