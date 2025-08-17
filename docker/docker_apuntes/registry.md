@@ -16,7 +16,12 @@ Funciona como “Docker Hub” pero es privado.
 
 ```shell
 docker run -d --name registry -p 5000:5000 --restart always registry
+
+#Con volume personal
+docker volume create personal_volume
+docker run -d --name registry2 -p 5001:5000 --restart always -v personal_volume:/var/lib/registry registry
 ```
+
 
 ## Subir imagen al repositorio
 
@@ -96,4 +101,12 @@ Para permitir el uso de un registro inseguro (HTTP), es necesario configurar el 
 ```
 ```shell
 sudo systemctl restart docker
+```
+
+## API 
+
+```
+official document
+
+https://docker-docs.uclv.cu/registry/spec/api/
 ```
