@@ -9,6 +9,7 @@ Este programa está pensado para automatizar pequeñas tareas para los sys admin
 ```
 Este programa es una prueba hecha en un entorno casero.
 Es un "homelab" y no funcionaría en otros entornos sin una previa adaptación.
+Si quieres usarlo adelante ! :)
 ```
 
 ## Interfaz principal
