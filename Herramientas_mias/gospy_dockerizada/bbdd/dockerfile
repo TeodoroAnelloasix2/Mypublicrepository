@@ -1,0 +1,10 @@
+FROM mysql:lts
+
+LABEL developer="elitalianodev" version="1.0.0" description="Backend for gospy"
+
+COPY ./initbbdd.sql /docker-entrypoint-initdb.d/
+
+EXPOSE 3306
+
+#docker build -t backendgospy:1.0.0 .
+#docker run -d --env-file=mysql.properties -p 3306:3306 backendgospy:1.0.0

@@ -1,0 +1,35 @@
+services:
+  bbdd1:
+    build:
+      context: ./bbdd/
+      dockerfile: dockerfile
+    env_file:
+      - ./bbdd/mysql.properties
+    ports:
+      - "3306:3306"
+    healthcheck: #Comprobar que la bbdd esté lista!
+          test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+          interval: 10s
+          timeout: 20s
+          retries: 10
+
+    networks:
+      - redgospy
+  gospybin:
+    build:
+      context: .
+      dockerfile: dockerfile
+    stdin_open: true # docker run -i
+    tty: true  # docker run -t
+  
+    env_file:
+      - ./programa/.env
+      #Esperamos la comprobacion de salud de mysql!
+    depends_on:
+      bbdd1:
+        condition: service_healthy
+    networks:
+      - redgospy
+networks:
+  redgospy:
+    driver: bridge

@@ -1,0 +1,25 @@
+FROM golang:1.25.1-alpine3.22 as compiler
+
+LABEL developer="elitalianodev" version="1.0.0" description="Creamos el ejecutable gospy"
+
+WORKDIR /app
+
+#Descargar dependencias
+COPY ./programa/go.mod ./programa/go.sum ./
+
+RUN go mod download
+
+#Creamos ejecutable
+COPY ./programa/ .
+RUN go build -o gospy ./main/main.go
+
+#Contenedor con ejecutable
+FROM debian:bookworm-slim
+
+WORKDIR /exec
+
+COPY --from=compiler /app/gospy .
+
+COPY ./programa/.env .
+
+CMD ["./gospy"]
