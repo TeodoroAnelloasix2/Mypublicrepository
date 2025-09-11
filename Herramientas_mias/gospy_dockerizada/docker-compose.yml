@@ -1,5 +1,6 @@
 services:
   bbdd1:
+    image: "gospy_dockerizada-bbdd1:1.0.0"
     build:
       context: ./bbdd/
       dockerfile: dockerfile
@@ -7,6 +8,8 @@ services:
       - ./bbdd/mysql.properties
     ports:
       - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
     healthcheck: #Comprobar que la bbdd esté lista!
           test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
           interval: 10s
@@ -16,6 +19,7 @@ services:
     networks:
       - redgospy
   gospybin:
+    image: "gospy_dockerizada-gospybin:1.0.0"
     build:
       context: .
       dockerfile: dockerfile
@@ -28,8 +32,14 @@ services:
     depends_on:
       bbdd1:
         condition: service_healthy
+    volumes:
+      - /proc/cpuinfo:/cpuinfo
+      - /proc/meminfo:/meminfo
     networks:
       - redgospy
 networks:
   redgospy:
     driver: bridge
+
+volumes:
+  db-data:
