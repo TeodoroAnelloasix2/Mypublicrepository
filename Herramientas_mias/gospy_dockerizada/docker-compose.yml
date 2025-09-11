@@ -33,8 +33,7 @@ services:
       bbdd1:
         condition: service_healthy
     volumes:
-      - /proc/cpuinfo:/cpuinfo
-      - /proc/meminfo:/meminfo
+      - /proc/:/systeminfo:ro
     networks:
       - redgospy
 networks:

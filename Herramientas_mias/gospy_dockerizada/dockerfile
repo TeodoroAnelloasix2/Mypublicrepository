@@ -16,10 +16,10 @@ RUN go build -o gospy ./main/main.go
 #Contenedor con ejecutable
 FROM debian:bookworm-slim
 
-#Carpetas para los datos
-RUN mkdir /meminfo
-RUN mkdir /cpuinfo
+#Carpeta para los datos
+RUN mkdir /systeminfo
 
+#Nos traemos el binario 
 WORKDIR /exec
 
 COPY --from=compiler /app/gospy .
