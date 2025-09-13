@@ -36,6 +36,8 @@ services:
       - /proc/:/systeminfo:ro
     networks:
       - redgospy
+    ports:
+      - "5001:5001"
 networks:
   redgospy:
     driver: bridge

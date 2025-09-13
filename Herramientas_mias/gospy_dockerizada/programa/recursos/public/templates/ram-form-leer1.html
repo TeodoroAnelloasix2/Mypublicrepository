@@ -1,0 +1,30 @@
+{{define "rampage-form-leer"}}
+<!--Pagina para leer los datos actuales-->
+{{template "header"}}
+<link rel="stylesheet" href="/recursos/public/css/ram-form-leer1.css">
+
+
+<h2> Selecciona la unidad de medida </h2>
+<main>
+    <form action="/leer-ram-actual" method="POST">
+        <p>
+        <input type="radio" name="eleccion" value="kb"> KB
+        </p>
+        <p>
+        <input type="radio" name="eleccion" value="mb" > MB
+        </p>
+        <p>
+        <input type="radio" name="eleccion" value="gb" > GB
+        </p>
+        <p>
+        <input type="submit" value="Enviar">
+        <input type="reset">
+        </p>
+    </form>
+</main>
+
+<div class="home-button">
+    <a class="button" href="/">Home</a>
+</div>
+{{template "footer"}}
+{{end}}

@@ -1,0 +1,61 @@
+{{define "ram-datos"}}
+{{template "header"}}
+<link rel="stylesheet" href="/recursos/public/css/ram-datos.css">
+<h1>Ram Recursos</h1>
+<table>
+    <tr>
+        <th>Unidad de medida</th>
+        <th>Total</th>
+        <th>Libre </th>
+        <th>Disponible </th>
+        <th>Swap Total </th>
+        <th>Swap libre</th>
+        <th>Cache </th>
+        <th>Swap Cache</th>
+    </tr>
+    <tr>
+        <td>{{.UnidadMedida}}</td>
+        <td>{{.Total}}</td>
+        <td>{{.Libre}}</td>
+        <td>{{.Disponible}}</td>
+        <td>{{.SwapTotal}}</td>
+        <td>{{.SwapLibre}}</td>
+        <td>{{.Cache}}</td>
+        <td>{{.SwapCache}}</td>
+    </tr>
+</table>
+<div class="flex-container">
+<div class="leyenda-memoria">
+    <h4>Leyenda de los campos de memoria</h4>
+    <ul>
+      <li><strong>Total:</strong> Memoria física total del sistema (RAM instalada), en {{.UnidadMedida}}.</li>
+      <li><strong>Libre:</strong> Memoria RAM completamente libre, no utilizada ni reservada.</li>
+      <li><strong>Disponibile:</strong> Estimación de memoria disponible para nuevos procesos, sin necesidad de swap.</li>
+      <li><strong>Swap Total:</strong> Tamaño total del espacio de swap configurado (en disco), en {{.UnidadMedida}}.</li>
+      <li><strong>Swap libre:</strong> Espacio libre en el área de swap, en {{.UnidadMedida}}.</li>
+      <li><strong>Cache:</strong> Memoria usada como caché de archivos abiertos. Liberable si se requiere.</li>
+      <li><strong>Swap Cache:</strong> Parte del swap que ya fue cargada en RAM, pero aún se mantiene en disco.</li>
+    </ul>
+</div>
+
+
+  
+<div id="ramdata"  
+     data-memtotal="{{.Total}}"
+     data-memfree="{{.Disponible}}"> <!--Creamos los datos para el grafico de Js-->
+</div>
+
+<div style="width: 500px">
+	<canvas id="grafica"></canvas>
+</div>
+</div>
+
+<div class="botones">
+    <a href="/" class="boton-principal">Home</a>
+    <a href="/cpu" class="boton-principal">Ver CPU</a>
+    <a href="/previa-leer-ram-actual" class="boton-principal">Cambiar unidad de medida</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/recursos/public/js/graficoram.js"></script>
+{{template "footer"}}
+{{end}}

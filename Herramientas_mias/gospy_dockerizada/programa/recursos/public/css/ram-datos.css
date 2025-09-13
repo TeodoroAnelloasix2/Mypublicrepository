@@ -1,0 +1,91 @@
+/* Fondo general */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e6f2fb; /* azul muy claro */
+    color: #03396c; /* azul oscuro para texto */
+    margin: 0;
+    padding: 0 20px;
+}
+
+/* Títulos */
+h1, h4 {
+    color: #0277bd;
+    text-align: center;
+}
+
+/* Tabla de RAM */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #f0f8ff; /* fondo azul muy claro */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+}
+
+th {
+    background-color: #4fc3f7;
+    color: #fff;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: #d0e7f9;
+}
+
+/* Flex contenedor */
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Leyenda de memoria */
+.leyenda-memoria {
+    background-color: #ffffffcc;
+    border: 1px solid #4fc3f7;
+    border-radius: 8px;
+    padding: 15px;
+    max-width: 400px;
+    line-height: 1.5;
+}
+
+/* Botones */
+.botones {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.boton-principal {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #4fc3f7;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.boton-principal:hover {
+    background-color: #0288d1;
+    transform: translateY(-2px);
+}
+
+/* Canvas del gráfico */
+canvas#grafica {
+    background-color: #ffffffcc;
+    border: 1px solid #4fc3f7;
+    border-radius: 8px;
+    padding: 10px;
+}

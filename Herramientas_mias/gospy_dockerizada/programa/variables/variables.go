@@ -3,7 +3,6 @@ package variables
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -14,7 +13,7 @@ func CargarVariables() {
 		log.Panicln("Error al godotenv.Load(), No se cargaron las variables")
 	} else {
 		fmt.Println("Variables cargadas correctamente! ")
-		fmt.Println("Host: " + os.Getenv("dbsrv"))
+		//fmt.Println("Host: " + os.Getenv("dbsrv"))
 	}
 
 }

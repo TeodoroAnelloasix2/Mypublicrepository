@@ -1,0 +1,84 @@
+/* Fondo general */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0f0ff, #f5fbff);
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Título */
+h2 {
+    text-align: center;
+    color: #2a5d9f;
+    margin-top: 20px;
+}
+
+/* Formulario */
+main {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+form {
+    background: #ffffff;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* Opciones */
+form p {
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+input[type="radio"] {
+    accent-color: #4a90e2; /* Azul moderno */
+    transform: scale(1.2);
+    margin-right: 8px;
+}
+
+/* Botones dentro del form */
+input[type="submit"],
+input[type="reset"] {
+    background: #4a90e2;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+    background: #357abd;
+    transform: scale(1.05);
+}
+
+/* Botón Home */
+.home-button {
+    text-align: center;
+    margin: 30px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #4a90e2;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+    background: #357abd;
+    transform: scale(1.05);
+}

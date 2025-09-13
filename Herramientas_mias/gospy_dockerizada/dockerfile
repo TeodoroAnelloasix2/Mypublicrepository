@@ -18,7 +18,9 @@ FROM debian:bookworm-slim
 
 #Carpeta para los datos
 RUN mkdir /systeminfo
+RUN mkdir -p /recursos
 
+COPY ./programa/recursos/ /recursos/
 #Nos traemos el binario 
 WORKDIR /exec
 
@@ -26,4 +28,7 @@ COPY --from=compiler /app/gospy .
 
 COPY ./programa/.env .
 
-CMD ["./gospy"]
+EXPOSE 5001
+
+#CMD ["/bin/bash"]
+ENTRYPOINT  ["./gospy"]

@@ -1,0 +1,65 @@
+/* Estilo base */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #eaf6fb;
+  color: #2c3e50;
+  margin: 0;
+  padding: 2rem;
+}
+
+/* Contenedor principal del home */
+.home-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: #c4cff1eb;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+/* Título destacado */
+.fondo-titulo {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 2rem;
+
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Texto y párrafos */
+h1 {
+  color: #204d74;
+  margin-bottom: 1.5rem;
+}
+
+p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #34495e;
+}
+
+.botones {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.boton-principal {
+  background-color: #1c80cf;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.boton-principal:hover {
+  background-color: #1463a8;
+}
