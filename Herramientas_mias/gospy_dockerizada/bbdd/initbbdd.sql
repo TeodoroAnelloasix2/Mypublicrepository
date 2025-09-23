@@ -7,7 +7,8 @@ DROP TABLE IF EXISTS cpumodelnamegospy;
 CREATE TABLE  cpumodelnamegospy(
     modelname VARCHAR(255) NOT NULL,
     idmodel INT NOT NULL AUTO_INCREMENT,
-    PRIMARY KEY (idmodel)
+    PRIMARY KEY (idmodel),
+    UNIQUE KEY uq_modelname (modelname)
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
@@ -19,8 +20,9 @@ CREATE TABLE cpuinfogospy (
     idmodel INT,
     modelname VARCHAR(255),
     procesor INT,
-    cpumhz INT,
-    cachesize VARCHAR(255),
+    cpumhz DECIMAL(10,3),
+    cachesize INT,
+    cacheMedida VARCHAR(25),
     cpucores INT,
     coreid INT,
     PRIMARY KEY (idtable),
