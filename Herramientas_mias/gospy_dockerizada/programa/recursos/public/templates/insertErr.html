@@ -1,0 +1,13 @@
+{{define "insert-error"}}
+
+<link rel="stylesheet" href="/recursos/public/css/insert-error.css">
+
+<h1>Error en la base de datos</h1>
+<div><img src="/recursos/public/images/gopher404.jpg" alt="gopherpanic" width="300" height="300" style="margin-top: 20px;"/></div>
+<h3>Error: {{.Errores}}</h3>
+
+<div class="botones">
+    <a href="/" class="boton-principal">Home</a>
+</div>
+
+{{end}}

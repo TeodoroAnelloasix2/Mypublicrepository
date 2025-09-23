@@ -4,6 +4,7 @@
 <h1>Ram Recursos</h1>
 <table>
     <tr>
+        <th>Fecha </th>
         <th>Unidad de medida</th>
         <th>Total</th>
         <th>Libre </th>
@@ -14,6 +15,7 @@
         <th>Swap Cache</th>
     </tr>
     <tr>
+        <td>{{ .Fecha}}</td>
         <td>{{.UnidadMedida}}</td>
         <td>{{.Total}}</td>
         <td>{{.Libre}}</td>
@@ -54,6 +56,7 @@
     <a href="/" class="boton-principal">Home</a>
     <a href="/cpu" class="boton-principal">Ver CPU</a>
     <a href="/previa-leer-ram-actual" class="boton-principal">Cambiar unidad de medida</a>
+    <a href="/guardar-datos-bbdd" class="boton-principal">Guardar Datos</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/recursos/public/js/graficoram.js"></script>

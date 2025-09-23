@@ -12,3 +12,9 @@ type MemRamInfo struct {
 	Fecha        string //Mysql devuelve tipo date como []bytes o uint8
 	Errores      error
 }
+
+type ResultadoInsercionRam struct {
+	Errores       error
+	Insercion     int64
+	FilasAfectada int64
+}

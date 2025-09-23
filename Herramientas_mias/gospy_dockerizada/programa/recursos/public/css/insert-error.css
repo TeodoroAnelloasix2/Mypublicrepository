@@ -1,0 +1,72 @@
+/* estilos-insert-error.css */
+
+/* Fondo general de la página */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffe6e6; /* rojo muy suave */
+    color: #660000; /* rojo oscuro para el texto */
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Encabezados */
+h1 {
+    font-size: 2.5rem;
+    color: #cc0000; /* rojo intenso */
+    margin-top: 40px;
+}
+
+h3 {
+    font-size: 1.3rem;
+    color: #990000; /* rojo medio */
+    margin: 10px 0;
+}
+
+/* Imagen de error */
+img {
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Contenedor de botones */
+.botones {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Estilo de botón principal */
+.boton-principal {
+    text-decoration: none;
+    background-color: #ff6666; /* rojo claro */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.boton-principal:hover {
+    background-color: #ff3333; /* rojo más intenso al pasar el cursor */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+}
+
+/* Responsive: ajustar tamaños y botones en pantallas pequeñas */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+    }
+    h3 {
+        font-size: 1.1rem;
+    }
+    .botones {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

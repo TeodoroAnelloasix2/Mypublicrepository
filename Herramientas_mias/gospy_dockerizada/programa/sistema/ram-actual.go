@@ -1,13 +1,22 @@
 package sistema
 
 import (
+	"context"
 	"fmt"
+	basedatos "gospy/conectarbbdd"
 	"gospy/modelos"
 	"gospy/variables"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
+	"time"
+)
+
+var (
+	UltimosDatosleidos     modelos.MemRamInfo
+	UltimaFechaParaUsuario string
+	UlitmaFechaBBDD        string
 )
 
 // Ejecuta la pagina para leer la ram actual, Se escoge medida kb,mb,gb
@@ -28,9 +37,14 @@ func RamActual() func(http.ResponseWriter, *http.Request) {
 
 		var medida = r.FormValue("eleccion")
 		DatosRam := LeerRamInfo(medida)
-
 		CambiarMedida(medida, &DatosRam)
 		DatosRam.UnidadMedida = strings.ToUpper(medida)
+		UltimosDatosleidos = DatosRam
+		fecha := time.Now()
+		fechaAmigableUsuario := fecha.Format("02-01-2006 15:04") //Formato mas amigable
+		fechabbdd := fecha.Format("2006-01-02 15:04:05")         //Formato DATETIME de MYSQL
+		UlitmaFechaBBDD = fechabbdd
+		DatosRam.Fecha = fechaAmigableUsuario
 		if err := variables.Plantillas.ExecuteTemplate(w, "ram-datos", DatosRam); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -133,4 +147,52 @@ func convertirCampo(valor string, divisor int) string {
 		return fmt.Sprintf("%.3f", res)
 	}
 	return fmt.Sprintf("%.2f", res)
+}
+
+// Guarda los datos en la bbdd
+func GuardarDatosBBDD() func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		UltimosDatosleidos.Fecha = UlitmaFechaBBDD
+		Res := modelos.ResultadoInsercionRam{}
+		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
+		condb := basedatos.Conectar()
+		defer condb.Close()
+
+		queryInsert := `INSERT INTO raminfogospy (unidadmedida,total,disponible,swaptotal,swaplibre,cache,swapcache,fecha) 
+						VALUES(?,?,?,?,?,?,?,?)`
+
+		output, err := condb.ExecContext(ctx, queryInsert, UltimosDatosleidos.UnidadMedida,
+			UltimosDatosleidos.Total,
+			UltimosDatosleidos.Disponible,
+			UltimosDatosleidos.SwapTotal,
+			UltimosDatosleidos.SwapLibre,
+			UltimosDatosleidos.Cache,
+			UltimosDatosleidos.SwapCache,
+			UltimosDatosleidos.Fecha,
+		)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			return
+		}
+
+		rows, err := output.RowsAffected()
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			return
+		}
+		Res.FilasAfectada = rows
+		i, err := output.LastInsertId()
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			return
+		}
+		Res.Insercion = i
+		if err := variables.Plantillas.ExecuteTemplate(w, "guardar-ok", Res); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+	}
+
 }

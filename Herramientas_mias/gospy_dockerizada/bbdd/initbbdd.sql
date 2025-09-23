@@ -38,6 +38,6 @@ CREATE TABLE raminfogospy (
     swaplibre VARCHAR(255),
     cache VARCHAR(255),
     swapcache VARCHAR(255),
-    fecha DATE,
+    fecha DATETIME,
     PRIMARY KEY (idtable)
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

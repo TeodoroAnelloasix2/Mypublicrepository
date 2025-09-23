@@ -12,12 +12,14 @@ import (
 
 func CargarRutas() *mux.Router {
 	router := mux.NewRouter()
+	ArchivosEstaticosMux(router)
 	router.HandleFunc("/", HandleHome())
 	router.HandleFunc("/home", HandleHome())
 	router.HandleFunc("/previa-leer-ram-actual", sistema.PreviaRamActual()) //Ejecuta formulario para escoger medida
 	router.HandleFunc("/leer-ram-actual", sistema.RamActual())              //Funcion que recibe datos para leer la ram actual
+	router.HandleFunc("/guardar-datos-bbdd", sistema.GuardarDatosBBDD())
 	router.NotFoundHandler = http.HandlerFunc(Pagina404())
-	ArchivosEstaticosMux(router)
+
 	return router
 }
 

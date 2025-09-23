@@ -1,0 +1,21 @@
+{{define "guardar-ok"}}
+{{template "header"}}
+<link rel="stylesheet" href="/recursos/public/css/guardar-ok.css">
+
+
+<h1>Se ha guardado la informacion con exito </h1>
+
+<h3>Agregada entrada numero: {{ .Insercion}}</h3>
+<h3>Filas afectadas {{.FilasAfectada}}</h3>
+
+<img src="/recursos/public/images/okagregar.png" alt="exito" width="300" height="300" style="margin-top: 20px;"/>
+
+
+<div class="botones">
+    <a href="/" class="boton-principal">Home</a>
+    <a href="/cpu" class="boton-principal">Ver CPU</a>
+    <a href="/previa-leer-ram-actual" class="boton-principal">Volver a leer datos</a>
+</div>
+
+{{template "footer"}}
+{{end}}
