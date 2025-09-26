@@ -1,0 +1,48 @@
+{{define "cpupage"}}
+{{template "header"}}
+
+<head>
+    <link rel="stylesheet" href="/recursos/public/css/cpu.css">
+  </head>
+  <h2>Vendor: {{ (index . 0).VendorId }}</h2>
+  <h3>Model Name: {{(index . 0).ModelName}} </h3>  
+  <div class="cpu-container">
+  <table>
+    <caption>Recursos CPU</caption>
+    <tr>
+      <th>Procesor</th>
+      <th>Cpu MHz</th>
+      <th>Cache Size</th>
+      <th>CPU Cores</th>
+      <th>Core ID</th>
+    </tr>
+  
+    {{ range . }}
+      {{ if ne .VendorId "" }}
+        <tr>
+          <td>{{ .Procesor }}</td>
+          <td>{{ .CpuMHZ }}</td>
+          <td>{{ .Cache }}</td>
+          <td>{{ .CpuCores }}</td>
+          <td>{{ .CoreId }}</td>
+        </tr>
+      {{ end }}
+    {{ end }}
+  </table>
+
+</div>
+  <div class="leyenda-cpu">
+    <h4>Leyenda de campos</h4>
+    <ul>
+      <li><strong>Procesor:</strong> Número identificador del procesador lógico.</li>
+      <li><strong>Vendor:</strong> Fabricante del procesador.</li>
+      <li><strong>Model Name:</strong> Nombre completo del modelo del procesador.</li>
+      <li><strong>Cpu MHz:</strong> Frecuencia actual de la CPU en megahercios.</li>
+      <li><strong>Cache Size:</strong> Tamaño de la caché de la CPU (memoria rápida interna).</li>
+      <li><strong>CPU Cores:</strong> Número de núcleos físicos de la CPU.</li>
+      <li><strong>Core ID:</strong> Identificador del núcleo dentro del procesador.</li>
+    </ul>
+</div>
+
+{{template "footer"}}
+{{end}}

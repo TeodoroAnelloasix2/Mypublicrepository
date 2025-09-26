@@ -18,3 +18,16 @@ type ResultadoInsercionRam struct {
 	Insercion     int64
 	FilasAfectada int64
 }
+
+type CpuInfo struct {
+	ModelName string
+	VendorId  string
+	IdModelFK int //Apunta a la tabla cpumodelnamegospy
+	IdTable   int //Apunta a la tabla cpuinfogospy
+	IdModel   int //Usar para FK
+	Procesor  int
+	CpuMHZ    string
+	Cache     string
+	CpuCores  int
+	CoreId    int
+}
