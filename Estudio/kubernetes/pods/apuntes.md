@@ -50,7 +50,7 @@ kubectl proxy
 #http://localhost:8001/api/v1/namespaces/default/pods
 ```
 
-# Crear un servicio
+## Crear un servicio
 ```shell
 
 kubectl expose pod pod-apache --port=80 --name=apache-svc --type=LoadBalancer
@@ -84,4 +84,29 @@ curl http://192.168.49.2:31537
 | (imagen)  |      | (imagen)  |
 +-----------+      +-----------+
 
+```
+## Port-forward
+
+```shell
+
+kubectl pot-forward pdo-name port-local:image-port
+kubectl port-forward podnginx 9999:80
+Forwarding from 127.0.0.1:9999 -> 80
+Forwarding from [::1]:9999 -> 80   # En este caso el mapeo es contra nuestra maquina fisica 
+
+curl http://localhost:9999
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+
+```
+
+```
+kubectl expose
+ - crea un Service que expone los Pods de manera estable dentro o fuera del clúster
+
+kubectl port-forward
+ - abre un túnel temporal desde tu máquina local hacia un Pod específico sin crear un Service
 ```
