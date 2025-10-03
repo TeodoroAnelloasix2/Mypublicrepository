@@ -116,5 +116,24 @@ kubectl port-forward
 ```shell
 kubectl create -f Nginx.yml
 #Salida -> pod/pod-nginx-yml created
+```
+```shell
+#Una vez creado el pod:
+#Exponer el servicio
+kubectl expose pod pod-nginx-yml --name pod-nginx-yml-svc --port=80 --type=LoadBalancer #El puerto ha de ser el del expose de la imagen 
+#Get info
+kubectl get svc pod-nginx-yml-svc -o wide
+NAME                TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+pod-nginx-yml-svc   LoadBalancer   10.110.48.223   <pending>     80:30104/TCP   32s   version=1.0.0,zone=prod
 
+minikube ip -p des-cluster
+#Salida -> 192.168.49.2
+curl 192.168.49.2:30104
+#Salida -> Imagen test para kubernets :)
+
+```
+
+## Eliminar un pod
+```shell
+kubectl delete pods/podhttpd 
 ```
