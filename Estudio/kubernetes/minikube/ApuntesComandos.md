@@ -11,6 +11,14 @@ minikube delete && minikube start --driver=docker
 minikube start --driver=docker -p cluster2 --nodes=2 # en versiones modernas + de 1 nodo
 # Crear otro cluster 
 
+#Utilizar otro container run time (motor de contenedores )
+minikube start --container-runtime=cri-o -p clusterCrio1
+
+⚖️ Diferencia clave
+
+--driver = cómo corre Minikube en la máquina.
+
+--container-runtime = cómo corre Kubernetes los contenedores dentro del clúster.
 ```
 
 ## 📊 status
