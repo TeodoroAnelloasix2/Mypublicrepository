@@ -53,6 +53,13 @@ minikube profile cluster-des
 minikube dashboard #Arrancar herramienta web
 ```
 
+## ssh
+
+```shell
+minikube ssh -p des-cluster
+```
+
+
 ## 📝 logs
 
 ```shell
@@ -71,4 +78,34 @@ minikube ip
 ```shell
 minikube delete -p cluster2 
 #borra el cluster especificado con -p 
+```
+
+## Como funciona cluster minikube???
+```bash
+            ┌───────────────────────┐
+            │  Tu máquina host      │
+            └──────────┬────────────┘
+                       │
+                       ▼
+            ┌──────────────────────────────┐
+            │Minikube cluster: des-cluster │
+            │     Cluster IP: 192.168.49.2 │
+            └──────────┬───────────────────┘
+                       │
+           ┌───────────┴────────────┐
+           │                        │
+           ▼                        ▼
+┌─────────────────┐        ┌────────────────────┐
+│ Nodo: m01       │        │ Nodo: m02          │
+│                 │        │  IP: 192.168.49.3 │
+│  (otros Pods)   │        └─────────┬──────────┘
+└─────────────────┘                  │
+                                     ▼
+                           ┌─────────────────────┐
+                           │ Pod: pod-apache     │
+                           │ Image: httpd        │
+                           │ IP:    10.244.1.4   │
+                           │ Estado: Running     │
+                           └─────────────────────┘
+
 ```

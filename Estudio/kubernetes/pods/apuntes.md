@@ -68,7 +68,8 @@ curl http://192.168.49.2:31537
 ```html
 <html><body><h1>It works!</h1></body></html>
 ```
-```
+```bash
+Esquema de infraestructura
 [ Cliente (navegador/curl) ]
               |
               v
@@ -109,4 +110,11 @@ kubectl expose
 
 kubectl port-forward
  - abre un túnel temporal desde tu máquina local hacia un Pod específico sin crear un Service
+```
+
+## Crear pods a partir de un manifest.yaml
+```shell
+kubectl create -f Nginx.yml
+#Salida -> pod/pod-nginx-yml created
+
 ```
