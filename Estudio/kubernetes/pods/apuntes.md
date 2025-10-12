@@ -56,7 +56,7 @@ kubectl proxy
 kubectl expose pod pod-apache --port=80 --name=apache-svc --type=LoadBalancer
 #salida -> service/apache-svc exposed
 #crea un objeto de tipo servicio
-  kubectl get svc
+kubectl get svc
 # NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 # apache-svc   LoadBalancer   10.100.187.49   <pending>     80:31537/TCP   69s
 # kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP        76m
@@ -104,12 +104,12 @@ curl http://localhost:9999
 
 ```
 
-```
+```shell
 kubectl expose
- - crea un Service que expone los Pods de manera estable dentro o fuera del clúster
+ #- crea un Service que expone los Pods de manera estable dentro o fuera del clúster
 
 kubectl port-forward
- - abre un túnel temporal desde tu máquina local hacia un Pod específico sin crear un Service
+ #- abre un túnel temporal desde tu máquina local hacia un Pod específico sin crear un Service
 ```
 
 ## Crear pods a partir de un manifest.yaml

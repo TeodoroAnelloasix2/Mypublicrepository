@@ -1,0 +1,26 @@
+FROM golang:1.25.1-bookworm as compiler
+
+LABEL developer="italianodev" version="v1" descripcion="Ejemplo de login con go"
+
+WORKDIR /app
+
+#Descargar dependencias
+COPY ./programa/go.mod ./programa/go.sum ./
+
+RUN go mod download
+
+COPY ./programa .
+
+RUN go build -o ejecutable ./cmd/bin/main.go
+
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+COPY ./programa/recursos .
+COPY ./programa/.env .
+COPY --from=compiler /app/ejecutable .
+EXPOSE 8089
+
+#CMD ["/bin/bash"]
+ENTRYPOINT  ["./ejecutable"]

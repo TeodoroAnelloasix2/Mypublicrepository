@@ -1,0 +1,44 @@
+services:
+  login-bbdd:
+    image: "italianodev/backend-gologin:v1"
+    build:
+      context: ./bbdd
+      dockerfile: Dockerfile
+    env_file:
+      - ./bbdd/mysql.properties
+    ports:
+      - "3306:3306"
+    volumes:
+      - login-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin","ping","-h","localhost"]
+      interval: 10s
+      timeout: 150s
+      retries: 10
+      start_period: 20s
+    networks:
+      - login-red
+
+  ctn-gologin:
+    image: "italianodev/frontend-gologin:v1"
+    build:
+      context: .
+      dockerfile: dockerfile
+    stdin_open: true
+    tty: true
+    ports:
+      - "8089:8089"
+    env_file:
+      - ./programa/.env
+    depends_on:
+      login-bbdd:
+        condition: service_healthy
+    networks:
+      - login-red
+
+networks:
+  login-red:
+    driver: bridge
+
+volumes:
+  login-volume:

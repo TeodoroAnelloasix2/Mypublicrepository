@@ -1,0 +1,24 @@
+{{define "login"}}
+<link rel="stylesheet" href="./public/css/login.css">
+<div class="formulario-div">
+<form action="/seguridad/loginpost" method="POST">
+    <div class="form-group">
+        <label for="nombre">Nombre: </label>
+        <input type="text" name="nombre" size="40" id="nombre" class="form-control" placeholder="Nombre: ">
+    </div>
+   
+    <div class="form-group">
+        <label for="passwd">Password: </label>
+        <input type="password" name="passwd" size="40" id="passwd" class="form-control" placeholder="Password: ">
+    </div>
+    <p>
+        <input type="submit" value="Enviar">
+        <input type="reset">
+    </p>
+</form>
+</div>
+
+<div class="home-button">
+    <a class="button" href="/">Home</a>
+</div>
+{{end}}
