@@ -14,14 +14,19 @@ chown userdemo:userdemo /home/userdemo/.ssh && chmod 700 /home/userdemo/.ssh
 WORKDIR /home/userdemo
 
 COPY keydir/llavedemo1.pub .ssh/authorized_keys
+COPY stillalive.sh .
 
-RUN chmod 600 .ssh/authorized_keys && chown userdemo:userdemo .ssh/authorized_keys
+RUN chmod 600 .ssh/authorized_keys && chown userdemo:userdemo .ssh/authorized_keys && \
+chmod +x stillalive.sh
 
 #Directory to send files
 RUN mkdir -p pool && chmod 777 pool
 
 RUN mkdir -p /run/sshd
+
+
 EXPOSE 22
 
-CMD ["/usr/sbin/sshd","-D"]
+
+CMD ["/bin/bash","stillalive.sh"]
 
