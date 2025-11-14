@@ -1,0 +1,134 @@
+- name: Update packeages
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist # Update y upgrade de paquetes
+
+- name: Install apache2
+  ansible.builtin.apt:
+    name: apache2
+    state: present # Present para instalar
+
+  notify: restart apache2
+
+- name: Install dependencies # Instalamos las dependencies con un loop para cada paquete requerido
+  ansible.builtin.apt: 
+    name: "{{ item }}"
+    state: present
+  loop:
+    - php
+    - php-common
+    - ghostscript
+    - libapache2-mod-php
+    - php-bcmath
+    - php-curl
+    - php-imagick
+    - php-intl
+    - php-json
+    - php-mbstring
+    - php-mysql
+    - php-xml
+    - php-zip
+    - php-cli
+    - php-dev
+    - php-imap
+    - php-opcache
+    - php-soap
+    - php-zip
+    - php-intl
+    - php-xml
+    - php-xmlrpc
+    - php-gd
+
+- name: Install MariaDB
+  ansible.builtin.import_role:
+    name: mariadb
+  vars:
+    mariadb_root_password: "{{ wp_db_root_password }}"
+    wordpress_user_password: "{{ wp_user_password }}"
+    
+
+- name: Add wordpressdb
+  community.mysql.mysql_db:
+    name: wordpress_db
+    state: present
+    login_user: root
+    login_password: "{{ wp_db_root_password }}"
+    state: present
+  tags: wpdb
+
+- name: Add woprdpress user & passwd
+  community.mysql.mysql_user:
+    name: wordpress
+    host: localhost
+    password: "{{ wp_user_password }}"
+    login_user: root
+    login_password: "{{ wp_db_root_password }}"
+    priv: "wordpress_db.*:ALL"
+    state: present
+  ignore_errors: true
+  tags: wpuserpassword
+
+- name: Download wordpress
+  ansible.builtin.get_url:
+    url: https://wordpress.org/wordpress-6.7.2.tar.gz
+    dest: /tmp/wordpress-6.7.2.tar.gz
+  tags: downloadwp
+
+- name: Unarchive Wordpress
+  ansible.builtin.unarchive:
+    src: /tmp/wordpress-6.7.2.tar.gz
+    dest: /var/www/html
+    remote_src: yes
+  tags: unzipwp
+
+- name: Generate wordpress config
+  ansible.builtin.copy:
+    remote_src: true
+    src: /var/www/html/wordpress/wp-config-sample.php
+    dest: /var/www/html/wordpress/wp-config.php
+
+- name: Change permissions
+  ansible.builtin.file:
+    path: /var/www/html/wordpress
+    mode: "0755"
+    owner: www-data
+    group: www-data
+
+- name: Change wp-config
+  ansible.builtin.lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    regexp: "{{ item.regexp }}"
+    line : "{{ item.line }}"
+    state: present
+  loop:
+    - { regexp: "database_name_here",line: "define( 'DB_NAME', 'wordpress_db' );"}
+    - { regexp: "username_here",line: "define( 'DB_USER', 'wordpress' );"}
+    - { regexp: "password_here",line: "define( 'DB_PASSWORD', '{{wp_user_password}}' );"}
+  tags: contentwpconfigphp
+
+- name: Add wordpress security-key salt
+  ansible.builtin.shell: |
+    curl -s https://api.wordpress.org/secret-key/1.1/salt/ >> /var/www/html/wordpress/wp-config.php
+
+- name: Generate Wordpress apache conf
+  ansible.builtin.copy:
+    remote_src: true
+    src: /etc/apache2/sites-available/000-default.conf
+    dest: /etc/apache2/sites-available/wordpress.conf
+
+- name: Change wordpress DocumentRoot
+  ansible.builtin.lineinfile:
+    path: /etc/apache2/sites-available/wordpress.conf
+    regexp: "/var/www/html"
+    line: "DocumentRoot /var/www/html/wordpress"
+    state: present
+
+- name: Enable wordpress site
+  ansible.builtin.shell: | 
+    a2ensite  wordpress.conf
+    a2dissite 000-default.conf
+  args:
+    chdir:  /etc/apache2/sites-available/
+  
+
+  notify: restart apache2

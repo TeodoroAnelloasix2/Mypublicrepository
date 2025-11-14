@@ -19,9 +19,12 @@ kubectl get pods
 #NAME       READY   STATUS    RESTARTS   AGE
 #podhttpd   1/1     Running   0          2m7s
 
-kubectl get pods -o wide
+kubectl get pods -o [wide|yaml|json]  # -o Tipo de output, es util enviar a un fichero para leer la salida mejor 
 #NAME       READY   STATUS    RESTARTS   AGE     IP           NODE              NOMINATED NODE   READINESS GATES
 #podhttpd   1/1     Running   0          2m43s   10.244.1.2   des-cluster-m02   <none>           <none>
+
+ kubectl get pod/pod-nginx-yml -o yaml > pods/salidainfo/info.yaml
+ 
 
 kubectl logs pod-name --tail=30  #Ver logs del pod
 kubectl logs -f pod-name #Ver logs en tiempo real

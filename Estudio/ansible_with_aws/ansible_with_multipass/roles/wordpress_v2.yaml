@@ -1,0 +1,9 @@
+- name: Wordpress Setup v2
+  hosts: demo
+  become: true
+
+  roles: 
+    - role: wordpress
+  
+  vars_files:
+    - variables.yaml
