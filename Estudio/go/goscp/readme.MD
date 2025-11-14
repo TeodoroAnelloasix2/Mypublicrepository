@@ -19,3 +19,36 @@ docker run -it  --rm --name remote1 -p 2222:22 -d simulateremoteserver:latest # 
 scp  -vvv -i "./keydir/llavedemo1" -P 2222  test.txt  userdemo@localhost:/home/userdemo/pool # Send file
 ssh-keyscan -p 2222 server >> ~/.ssh/known_hosts  # Use keyscan with simulated the server through localhost:2222
 ```
+
+## Home Lab structure
+```shell
+itachi@roothost:goscp$ tree
+.
+├── docker
+│   └── recursos
+│       ├── crearllave.sh
+│       ├── Dockerfile
+│       ├── keydir
+│       │   ├── llavedemo1
+│       │   └── llavedemo1.pub
+│       └── stillalive.sh
+├── ejecutable
+│   ├── cmd
+│   │   └── bin
+│   │       └── main.go
+│   ├── go.mod
+│   ├── go.sum
+│   ├── internal
+│   │   ├── sharefiles
+│   │   │   └── share.go
+│   │   └── variables
+│   │       └── variables.go
+│   └── recursos
+│       ├── file1
+│       ├── file2
+│       ├── keydir
+│       │   ├── llavedemo1
+│       │   └── llavedemo1.pub
+│       └── knhostscript
+└── readme.MD
+```
