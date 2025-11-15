@@ -22,7 +22,7 @@ ssh-keyscan -p 2222 server >> ~/.ssh/known_hosts  # Use keyscan with simulated t
 
 ## Home Lab structure
 ```shell
- tree
+tree
 .
 ├── docker
 │   └── recursos
