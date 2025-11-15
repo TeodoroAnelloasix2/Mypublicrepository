@@ -1,26 +1,33 @@
 # Example scp with golang
 
-### HostKeyCallBack
+## Home Lab  Linkedin 
 
-```golang
-//Configuration of ssh.ClientConfig
-HostKeyCallback: ssh.InsecureIgnoreHostKey() //This callback function does NOT check the fingerprint of the remote server
-HostKeyCallback: yourfunc // We will create a function that checks the server fingerprint using the golang.org/x/crypto/ssh/knownhosts package named yourfunc
+### docker
 ```
+We will use docker to simulate multiple remote servers. 
+Each contaniner will generate a new fingerprint every time it is created, which allow us to test our verification.
 
-### Check and add server fingerprint
-
+i've built a docker image called simulateremoteserver:latest 
+```
 ```shell
-ssh-keygen -F server -f /path/tofile/know_hosts # Check if there is an entry (fingerprint) for the given server in the specified file
-ssh-keyscan server >> /path/tofile/know_hosts # # Add an entry (fingerprint) to the file (the server is now trusted)
-#We will use container to simulate a remote server
-docker build -t simulateremoteserver  .  #Build image 
-docker run -it  --rm --name remote1 -p 2222:22 -d simulateremoteserver:latest # Run container
-scp  -vvv -i "./keydir/llavedemo1" -P 2222  test.txt  userdemo@localhost:/home/userdemo/pool # Send file
-ssh-keyscan -p 2222 server >> ~/.ssh/known_hosts  # Use keyscan with simulated the server through localhost:2222
+docker build -t simulateremoteserver:latest . 
 ```
+### ejecutable
 
-## Home Lab structure
+```
+It contains the binary to execute. 
+
+To compile it
+```
+```shell
+
+go build  -o goscpbin cmd/bin/main.go
+```
+```
+its important to run the program in this directory ecause the script uses relative paths
+```
+### Structure
+
 ```shell
 tree
 .
@@ -51,4 +58,71 @@ tree
 │       │   └── llavedemo1.pub
 │       └── knhostscript
 └── readme.MD
+```
+
+# TEST
+
+```shell
+docker run --name srvremote1  -d -it -p 2222:22  simulateremoteserver:latest 
+
+41e4233f5d6587b1dbfda25b26f15f22e4e3c32bde76502fdd859c1f790334a4
+
+docker ps
+
+CONTAINER ID   IMAGE                         COMMAND                  CREATED         STATUS         PORTS                                     NAMES
+41e4233f5d65   simulateremoteserver:latest   "/bin/bash stillaliv…"   4 seconds ago   Up 3 seconds   0.0.0.0:2222->22/tcp, [::]:2222->22/tcp   srvremote1
+
+./goscpbin
+
+#Output:
+Reading knownHost file 
+File recursos/knhostscript read successfully
+Reading ssh key 
+File recursos/keydir/llavedemo1 read successfully
+2025/11/15 23:55:56 error opening connection ssh: handshake failed: knownhosts: key mismatch
+
+ssh-keyscan -p 2222 127.0.0.1 > recursos/knhostscript 
+
+# 127.0.0.1:2222 SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.13
+# 127.0.0.1:2222 SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.13
+# 127.0.0.1:2222 SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.13
+# 127.0.0.1:2222 SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.13
+# 127.0.0.1:2222 SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.13
+
+./goscpbin
+
+Reading knownHost file 
+File recursos/knhostscript read successfully
+Reading ssh key 
+File recursos/keydir/llavedemo1 read successfully
+
+Files correctly send!  <-- PERFECT!
+
+docker exec -it srvremote1 /bin/bash -c "ls ./pool && for a in ./pool/*; do cat \$a &&  echo "" ; done" ; echo
+file1  file2
+Hello from file 1
+Hello from file 2
+
+```
+
+
+
+### HostKeyCallBack
+
+```golang
+//Configuration of ssh.ClientConfig
+HostKeyCallback: ssh.InsecureIgnoreHostKey() //This callback function does NOT check the fingerprint of the remote server
+HostKeyCallback: yourfunc // We will create a function that checks the server fingerprint using the golang.org/x/crypto/ssh/knownhosts package named yourfunc
+```
+
+### Check and add server fingerprint
+
+```shell
+ssh-keygen -F server -f /path/tofile/know_hosts # Check if there is an entry (fingerprint) for the given server in the specified file
+ssh-keyscan server >> /path/tofile/know_hosts # # Add an entry (fingerprint) to the file (the server is now trusted)
+#We will use container to simulate a remote server
+docker build -t simulateremoteserver  .  #Build image 
+docker run -it  --rm --name remote1 -p 2222:22 -d simulateremoteserver:latest # Run container
+scp  -vvv -i "./keydir/llavedemo1" -P 2222  test.txt  userdemo@localhost:/home/userdemo/pool # Send file
+ssh-keyscan -p 2222 server >> ~/.ssh/known_hosts  # Use keyscan with simulated the server through localhost:2222
 ```
