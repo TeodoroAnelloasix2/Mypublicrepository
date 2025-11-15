@@ -1,0 +1,15 @@
+apiVersion: "v1"
+kind: Pod
+metadata:
+  name: "pod-multi-container"
+spec:
+  containers:
+  - name: web
+    image: nginx
+    ports:
+    - containerPort: 80
+  - name: "alp-monitor" #Actaulmente es  apl-monitor
+    image: alpine
+    #command: [ "watch", "-n10", "curl", "http://127.0.0.1" ]
+    command: [ "watch", "-n5", "ping", "127.0.0.1" ] #watch comando que hace algo  -n5 cada 5 seg  ping comando a ejeuctar por watch dir ip 
+    #Cada pod tiene una ip que comparten los contenedores de ese pod! Por eso con localhost funciona!

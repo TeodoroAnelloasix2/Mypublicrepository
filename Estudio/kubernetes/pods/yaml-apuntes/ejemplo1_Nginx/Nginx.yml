@@ -5,8 +5,9 @@ metadata:
   namespace: default # Namespace donde alojar el recurso
   labels:
     # labels Permite poner etiquetas a los recursos
-    zone: prod
-    version: 1.0.0 # Version de la app
+    zone: desarrollo
+    version: "1.0.1" # Version de la app
+    app: "test-1"
   annotations:
     description: "Pod que ejecuta un contenedor nginx con página de ejemplo"
     maintainer: "italianodev"

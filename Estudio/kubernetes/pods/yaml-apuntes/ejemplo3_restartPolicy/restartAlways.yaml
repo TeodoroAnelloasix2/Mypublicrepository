@@ -1,0 +1,11 @@
+apiVersion: "v1"
+kind: Pod
+metadata:
+  name: tomcat
+  labels:
+    app: tomact-app
+spec:
+  containers:
+  - name: tomcat
+    image: tomcat
+  restartPolicy: always #Opcion por defecto!

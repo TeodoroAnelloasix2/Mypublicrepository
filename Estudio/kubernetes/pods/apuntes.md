@@ -138,11 +138,51 @@ curl 192.168.49.2:30104
 
 ## Eliminar un pod
 ```shell
-kubectl delete pods/podhttpd 
+kubectl delete pods/podhttpd
+kubectl delete pod pod-name,pod-name2  #Borrar mas pods a la vez 
+kubectl delete pod pod-name --grace-period=5 #Espera 5 segundos
+kubectl delete pod pod-name --now #Lo borra sin esperar que terminen los procesos 
+kubectl delete pod pod-name --all #Borra todo! Cuidado
 ```
 
 ## Comando apply
 
 ```shell
 kubectl apply -f file.yaml
+```
+
+## Ver eventos de contenedor dentro de un pod
+
+```yaml
+apiVersion: "v1"
+kind: Pod
+metadata:
+  name: "pod-multi-container" #Pod name
+spec:
+  containers:
+  - name: web
+    image: nginx
+    ports:
+    - containerPort: 80
+  - name: "apl-monitor"  #contenedor-name
+    image: alpine
+    command: [ "watch", "-n5", "ping", "127.0.0.1" ]
+```
+
+```shell
+kubect logs pod-name -c contenedor-name
+
+#Ejemplo:
+
+kubectl logs pod-multi-container -c apl-monitor
+```
+```shell
+# Salida:
+64 bytes from 127.0.0.1: seq=24524 ttl=64 time=0.050 ms
+64 bytes from 127.0.0.1: seq=24525 ttl=64 time=0.051 ms
+64 bytes from 127.0.0.1: seq=24526 ttl=64 time=0.096 ms
+64 bytes from 127.0.0.1: seq=24527 ttl=64 time=0.069 ms
+64 bytes from 127.0.0.1: seq=24528 ttl=64 time=0.082 ms
+64 bytes from 127.0.0.1: seq=24529 ttl=64 time=0.114 ms
+64 bytes from 127.0.0.1: seq=24530 ttl=64 time=0.057 ms
 ```
