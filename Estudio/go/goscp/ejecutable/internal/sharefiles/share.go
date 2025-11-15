@@ -19,7 +19,7 @@ import (
 
 func ExecScp() (err error) {
 
-	//Creating hostkeycallback
+	//Creating our function which provide the known host check reading the specified file
 	hkcallback, err := CreateCallBack()
 	if err != nil {
 		return err
@@ -30,7 +30,7 @@ func ExecScp() (err error) {
 	if err != nil {
 		return err
 	}
-	//Creating our configuration to use it
+	//Creating connection configuration
 	cfg := &ssh.ClientConfig{
 		User:            v.UserDemo,
 		Auth:            []ssh.AuthMethod{ssh.PublicKeys(key)},
@@ -41,30 +41,27 @@ func ExecScp() (err error) {
 	//Establish timeout with context
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	//The result of this is host:port
 	server := net.JoinHostPort(v.HostRemote, v.Port)
 
-	//With walkdir we can walks the files in a given directory
-	//path is the absolute path to the current file
-	//d is the current file
-	//It can be the same do a for cicle on a filename list and send file
+	//With walkdir we can walks the files in the given directory
+	//path is the absolute path to reach the current file
+	//d is the name of the current file
 	err = fpth.WalkDir(v.PathFiles, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return fmt.Errorf("error walks dir 1 %w", err)
 		}
-		//If the current file is not a directory
+		//If the current file is not a directory and contanis the word "file" in its name
 		if !d.IsDir() && strings.Contains(d.Name(), "file") {
 			conn := scp.NewClientWithTimeout(server, cfg, cfg.Timeout)
 			err = conn.Connect()
 			if err != nil {
 				return fmt.Errorf("error opening connection %w", err)
 			}
-			f, err := os.Open(path) //We can use d.Name() or path
+			f, err := os.Open(path)
 			if err != nil {
 				return fmt.Errorf("error opening file %s-> %w", d.Name(), err)
 			}
 			defer f.Close()
-			//Creating string that contains /remotepath/filename
 			dest := fpth.Join(v.RemotePath, d.Name())
 			err = conn.CopyFile(ctx, f, dest, "0744")
 			if err != nil {
@@ -79,7 +76,7 @@ func ExecScp() (err error) {
 	return nil
 }
 
-// Read key to use to send file
+// Read private key so we can use to send file
 func ReadSshKey() (key ssh.Signer, err error) {
 	fmt.Println("Reading ssh key ")
 	buf, err := os.ReadFile(v.SshKeyFile)

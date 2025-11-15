@@ -140,3 +140,9 @@ curl 192.168.49.2:30104
 ```shell
 kubectl delete pods/podhttpd 
 ```
+
+## Comando apply
+
+```shell
+kubectl apply -f file.yaml
+```
