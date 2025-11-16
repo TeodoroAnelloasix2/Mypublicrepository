@@ -41,8 +41,16 @@ func ExecScp() (err error) {
 	//Establish timeout with context
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
+
 	server := net.JoinHostPort(v.HostRemote, v.Port)
 
+	//Connection
+	conn := scp.NewClientWithTimeout(server, cfg, cfg.Timeout)
+	err = conn.Connect()
+	if err != nil {
+		return fmt.Errorf("error opening connection %w", err)
+	}
+	defer conn.Close()
 	//With walkdir we can walks the files in the given directory
 	//path is the absolute path to reach the current file
 	//d is the name of the current file
@@ -52,20 +60,21 @@ func ExecScp() (err error) {
 		}
 		//If the current file is not a directory and contanis the word "file" in its name
 		if !d.IsDir() && strings.Contains(d.Name(), "file") {
-			conn := scp.NewClientWithTimeout(server, cfg, cfg.Timeout)
-			err = conn.Connect()
-			if err != nil {
-				return fmt.Errorf("error opening connection %w", err)
-			}
-			f, err := os.Open(path)
-			if err != nil {
-				return fmt.Errorf("error opening file %s-> %w", d.Name(), err)
-			}
-			defer f.Close()
-			dest := fpth.Join(v.RemotePath, d.Name())
-			err = conn.CopyFile(ctx, f, dest, "0744")
-			if err != nil {
-				return fmt.Errorf("error sending file %w", err)
+			// Wrap file operations in an anonymous function to ensure the file is closed with defer
+			if err := func() error {
+				f, err := os.Open(path)
+				if err != nil {
+					return fmt.Errorf("error opening file %s-> %w", d.Name(), err)
+				}
+				defer f.Close()
+				dest := fpth.Join(v.RemotePath, d.Name())
+				err = conn.CopyFile(ctx, f, dest, "0744")
+				if err != nil {
+					return fmt.Errorf("error sending file %w", err)
+				}
+				return nil
+			}(); err != nil {
+				return err
 			}
 		}
 		return nil
