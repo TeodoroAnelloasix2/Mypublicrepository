@@ -1,6 +1,6 @@
 # Example scp with golang
 
-## Home Lab  Linkedin 
+## Home Lab for Linkedin 
 
 ### docker
 ```
