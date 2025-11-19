@@ -1,9 +1,7 @@
 # Pods
 
-
 ## Crear un pods con run
 ```shell
-
 kubectl run pod-name --image=image_name 
 #ejemplo:
 
@@ -23,8 +21,7 @@ kubectl get pods -o [wide|yaml|json]  # -o Tipo de output, es util enviar a un f
 #NAME       READY   STATUS    RESTARTS   AGE     IP           NODE              NOMINATED NODE   READINESS GATES
 #podhttpd   1/1     Running   0          2m43s   10.244.1.2   des-cluster-m02   <none>           <none>
 
- kubectl get pod/pod-nginx-yml -o yaml > pods/salidainfo/info.yaml
- 
+kubectl get pod/pod-nginx-yml -o yaml > pods/salidainfo/info.yaml
 
 kubectl logs pod-name --tail=30  #Ver logs del pod
 kubectl logs -f pod-name #Ver logs en tiempo real
@@ -33,6 +30,12 @@ kubectl describe resourcetype/resource
 #ejemplo   pod/pod-name
 kubectl describe pod/podhttpd
 
+#Ver etiquetas
+kubectl get pod mypod --show-labels
+#Crear columnas con -L column-name
+kubectl get pod tomcat-lab --show-labels -L description,entorno
+NAME         READY   STATUS    RESTARTS   AGE     DESCRIPTION               ENTORNO      LABELS
+tomcat-lab   1/1     Running   0          4m33s   mi-tomcat-de-desarrollo   desarrollo   description=mi-tomcat-de-desarrollo,entorno=desarrollo
 ```
 
 ## Ejecutar un comando que ataca el pods
@@ -83,11 +86,14 @@ Esquema de infraestructura
      ---------------------
      |                   |
      v                   v
-+-----------+      +-----------+
-|   Pod 1   |      |   Pod 2   |   <-- Réplicas del mismo Deployment
-| (imagen)  |      | (imagen)  |
-+-----------+      +-----------+
 
+          deployment
+____________________________________     
+|  +-----------+      +-----------+ |
+|  |   Pod 1   |      |   Pod 2   | | <-- Réplicas del mismo Deployment
+|  | (imagen)  |      | (imagen)  | |
+|  +-----------+      +-----------+ |
+|___________________________________|
 ```
 ## Port-forward
 
@@ -185,4 +191,103 @@ kubectl logs pod-multi-container -c apl-monitor
 64 bytes from 127.0.0.1: seq=24528 ttl=64 time=0.082 ms
 64 bytes from 127.0.0.1: seq=24529 ttl=64 time=0.114 ms
 64 bytes from 127.0.0.1: seq=24530 ttl=64 time=0.057 ms
+```
+
+## Session interactiva en el pod
+```shell
+kubectl exec tomcat -i -t -- bash
+root@tomcat:/usr/local/tomcat# 
+```
+
+## Agregar una label "etiqueta"
+
+```shell
+kubectl label pod mypod mylabel=valor
+
+kubectl label pod tomcat-lab manteiner=italianodev
+pod/tomcat-lab labeled
+
+#Sobre escribir etiqueta existente
+kubectl label --overwrite pod tomcat-lab entorno=integracion
+pod/tomcat-lab labeled
+
+kubectl get pod tomcat-lab --show-labels 
+NAME         READY   STATUS    RESTARTS   AGE   LABELS
+tomcat-lab   1/1     Running   0          20m   description=mi-tomcat-de-desarrollo,entorno=integracion,manteiner=italianodev
+
+#Eliminar una etiqueta -> mylabel-
+kubectl label pod tomcat-lab description-
+pod/tomcat-lab unlabeled
+
+kubectl get pod tomcat-lab --show-labels 
+NAME         READY   STATUS    RESTARTS   AGE   LABELS
+tomcat-lab   1/1     Running   0          29m   entorno=integracion,manteiner=italianodev
+ 
+```
+
+## Usar los selectors
+
+```shell
+#Se puede usar --selector o -l 
+get pods --show-labels --selector entorno=desarrollo
+NAME         READY   STATUS    RESTARTS      AGE    LABELS
+t1           1/1     Running   0             6m3s   entorno=desarrollo,manteiner=italianodev
+tomcat-lab   1/1     Running   1 (21m ago)   150m   description=mi-tomcat-de-desarrollo,entorno=desarrollo,manteiner=carlos
+
+kubectl get pods --show-labels -l manteiner=carlos
+NAME         READY   STATUS    RESTARTS      AGE    LABELS
+tomcat-lab   1/1     Running   1 (24m ago)   153m   description=mi-tomcat-de-desarrollo,entorno=desarrollo,manteiner=carlos
+
+kubectl get pods --show-labels --selector entorno=integracion,manteiner=torvall
+kubectl get pods --show-labels --selector entorno!=integracion
+// //                          --selector 'entorno in(desarrollo,integracion)'
+#Los selectors se pueden combinar con otros comandos
+kubectl delete pod  --selector 'entorno notin(desarrollo,integracion)'
+#Con jsonpath
+kubectl get pod tomcat-lab -o jsonpath={.metadata.annotations} | jq
+```
+
+# Deployments
+
+```
+Gestiona los despliegues de nuestras aplicaciones
+Al crear un deployment se lanza:
+
+  - deployment
+     |
+     |_
+       replica sets
+          |
+          |_ 
+            pods
+```
+
+```shell
+kubectl create deploymente mydeploy   --image=myimage 
+
+kubectl create deployment apache-deploy --image=httpd
+#deployment.apps/apache-deploy created
+
+kubectl describe deployment mydeploy
+#Info sobre replica stes
+kubectl get rs  
+kubectl edit 
+
+#Salen muchas opciones! Mirar 
+kubectl edit deploy mydeploy
+
+#Escalar nuestro deploy nginx-wkloads
+kubectl scale deploy nginx-wkloads --replicas=5
+kubectl scale deploy -l entorno=desarrollo --replicas=6 #Apuntando a una o varias etiqueta
+
+deployment.apps/nginx-wkloads scaled
+
+```
+
+
+# Dashboard 
+```shell
+#Debug de posibles problemas
+kubectl get pods -n kubernetes-dashboard
+kubectl logs -n kubernetes-dashboard  mykubernetes-dashboard-xxxxxxxxxx
 ```

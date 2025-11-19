@@ -1,0 +1,13 @@
+#Selectors -> Objeto primario con los que se relacionan algunos componentes: Deployment, replica-sets,servicios etc...
+#Son como "where" en sql se utilizan para seleccionar, localizar objetos con determinada etiquetas
+apiVersion: "v1"
+kind: Pod
+metadata:
+  name: t1
+  labels:
+    entorno: "desarrollo"
+    manteiner: "italianodev"
+spec:
+  containers:
+  - name: t1-ctn
+    image: tomcat

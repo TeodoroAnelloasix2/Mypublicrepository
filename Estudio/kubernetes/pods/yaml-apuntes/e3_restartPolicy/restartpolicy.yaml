@@ -1,0 +1,13 @@
+apiVersion: "v1"
+kind: Pod
+metadata:
+  name: tomcat
+  labels:
+    app: tomact-app
+spec:
+  containers:
+  - name: tomcat
+    image: tomcat
+  #restartPolicy: Always #Opcion por defecto!
+  #restartPolicy: OnFailure #Si hay un fallo inesperado
+  restartPolicy: Never #Nuca se vuelve a levantar

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-wkloads
+  labels:
+    entorno: desarrollo
+    version: 1.0.0
+    app: wkloads-nginx1
+spec:
+  replicas: 3 #Inidica el numero de pods a desplegar
+  selector:
+    #Permite seleccionar objetos que cumplan las condiciones   Busca coincidencia en -> spec.template.metadata.labels.
+    matchLabels:
+      app: nginx-1
+      entorno: desarrollo
+  #Plantilla de los cantainers
+  template:
+    metadata:
+      labels:
+        #Aqui los mathcLabels del selector
+        app: nginx-1
+        entorno: desarrollo
+    spec:
+      containers:
+      - name: nginx-ctn-wkloads1
+        image: nginx:1.29.3
+        ports:
+        - containerPort: 80
+
+# Aplicar ->  kubectl apply -f wkloads_nginx.yaml 

@@ -1,0 +1,19 @@
+apiVersion: "v1"
+kind: Pod
+metadata:
+  name: tomcat-lab
+  #Las labels son etiquetas y se pueden "inventar" clave: valor
+  #Se usan para agregar metadatos 
+  labels:
+    entorno: "desarrollo"
+    description: "mi-tomcat-de-desarrollo"
+    manteiner: "carlos"
+  #Agrega info,metadata addicional pero no sirve para identificar objetos!
+  #Se pueden ver con describe o con -o jsonpath={.path.to.element}
+  annotations:
+    doc: "Se debe cumplir con la ISO 27001"
+    adjunto: "Incidencia: devops-3114"
+spec:
+  containers:
+  - name: tomcat-lab
+    image: tomcat
