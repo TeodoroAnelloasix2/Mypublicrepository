@@ -1,4 +1,16 @@
 #Es necesario crear un deployment al cual acceder 
 apiVersion: "v1"
+kind: Service
+metadata:
+  name: nginx1-svc
+spec:
+  type: NodePort
+  selector:
+    #El selector del Service debe apuntar a los labels de los Pods
+    app: nginx-1
+    entorno: desarrollo
+  ports:
+  - port: 80 #puerto que otros Pods usan para conectar con tu servicio.
+    targetPort: 80 #Puerto expuesto por el contenedor en el Pod
 
-#TODO
+    nodePort: 30007 #Puerto accesible del service 

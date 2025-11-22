@@ -56,3 +56,40 @@ minikube service list
 └──────────────────────┴───────────────────────────┴──────────────┴───────────────────────────┘
 
 ```
+
+```shell
+#Ver ip/puertos mapeados
+kubectl describe svc nginx1-svc
+Name:                     nginx1-svc
+Namespace:                default
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=nginx-1,entorno=desarrollo
+Type:                     NodePort
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.97.70.179
+IPs:                      10.97.70.179
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  30007/TCP
+Endpoints:                10.244.0.3:80,10.244.1.11:80,10.244.1.12:80 #Ip de los pods
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Internal Traffic Policy:  Cluster
+Events:                   <none>
+
+
+kubectl get pods -o wide
+NAME                             READY   STATUS    RESTARTS   AGE   IP            NODE              NOMINATED NODE   READINESS GATES
+nginx-wkloads-6d98654f47-2k4qb   1/1     Running   0          30m   10.244.1.12   des-cluster-m02   <none>           <none>
+nginx-wkloads-6d98654f47-nhzfs   1/1     Running   0          30m   10.244.1.11   des-cluster-m02   <none>           <none>
+nginx-wkloads-6d98654f47-skssb   1/1     Running   0          30m   10.244.0.3    des-cluster       <none>           <none>
+
+#Si escalamos las listas de ip de los pods se actualiza
+kubectl scale deploy nginx-wkloads --replicas=5
+kubectl describe svc nginx1-svc
+Endpoints:   10.244.0.3:80,10.244.1.11:80,10.244.1.12:80 + 2 more...
+
+#Si se elimina un pod y se crea otro nuevo y la ip ha cambiado se mapea en el service sin problema
+```
