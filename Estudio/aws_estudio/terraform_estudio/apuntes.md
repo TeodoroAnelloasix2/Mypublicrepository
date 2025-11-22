@@ -47,3 +47,17 @@ terraform show
 terraform plan --out my-plan
 terraform apply my-plan
 ```
+
+## To automatically indent .tf files
+```
+terraform fmt file.tf
+```
+
+# To validate our .ts files
+```shell
+terraform validate
+Success! The configuration is valid.
+
+#If there are errors, this command will display them
+
+```
