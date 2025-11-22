@@ -41,3 +41,9 @@ terraform apply -auto-approve # Apply automatically without confirmation
 ```shell
 terraform show
 ```
+
+## Save and apply specific plan
+```shell
+terraform plan --out my-plan
+terraform apply my-plan
+```
