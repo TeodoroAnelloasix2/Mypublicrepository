@@ -3,12 +3,21 @@ variable "vpc_cidr_block" {
   type        = string
 }
 
-variable "aws_region" {
-  description = "Aws default region"
+variable "aws_region_virgina" {
+  description = "Aws default region us-east-1 virginia"
+  type        = string
+}
+variable "aws_region_ohio" {
+  type        = string
+  description = "Aws region ohio us-east-2"
+
+}
+variable "vpc_name_virginia" {
+  description = "vpc name"
   type        = string
 }
 
-variable "vpc_name" {
+variable "vpc_name_ohio" {
   description = "vpc name"
   type        = string
 }
@@ -26,7 +35,12 @@ variable "enviroment" {
   type        = string
 }
 
-variable "ava_zones" {
-  description = "availabilties zones"
+variable "ava_zones_virginia" {
+  description = "availabilties zones N virginia"
+  type        = list(string)
+}
+
+variable "ava_zones_ohio" {
+  description = "availabilties zones Ohio"
   type        = list(string)
 }

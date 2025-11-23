@@ -53,11 +53,41 @@ terraform apply my-plan
 terraform fmt file.tf
 ```
 
-# To validate our .ts files
+## To validate our .ts files
 ```shell
 terraform validate
 Success! The configuration is valid.
 
 #If there are errors, this command will display them
+```
 
+
+# Variables
+
+### 1 environmet variables
+
+```shell
+#We can define environmet variables that terraform can use 
+#We must define them like "TF_VAR_myvar" TF_VAR is a reserved prefix and then our variables name 
+export TF_VAR_vpc_name="my-vpc"
+```
+```hcl
+
+variables "vpc_name"{
+  description="my vpc name"
+  type=string
+}
+
+```
+
+### 2 Define variables with default value
+```
+default="value"
+```
+```hcl
+variables "vpc_name"{
+  description="my vpc name"
+  type=string
+  default="my-vpc"
+}
 ```

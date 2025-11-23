@@ -17,6 +17,11 @@ terraform {
   required_version = "~>1.13.0" #This refers to terraform
 }
 provider "aws" {
-  region = var.aws_region
+  region = var.aws_region_virgina
+  alias  = "virginia"
 }
 
+provider "aws" {
+  region = var.aws_region_ohio
+  alias  = "ohio"
+}
