@@ -1,7 +1,7 @@
 resource "terraform_data" "exec-script"{
     lifecycle {
         action_trigger {
-            events = [after_create]
+            events=  [after_create]
             actions = [action.local_command.runscript]
         }
 
@@ -9,7 +9,7 @@ resource "terraform_data" "exec-script"{
 }
 action "local_command" "runscript"{
     config {
-        command="/bin/bash"
+        command="bash"
         arguments=["script-ex.sh","italianodev"]
         stdin = jsonencode({
             "entorno" : "desarrollo"

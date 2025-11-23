@@ -15,6 +15,6 @@ provider "aws" {
 #To create our variables or trough command line terraform apply -var="aws_region=eu-west-1"
 variable "aws_region" {
   description = "Aws region"
-    type = string
-    default = "us-east-1"
+  type = string
+  default = "us-east-1"
 }
