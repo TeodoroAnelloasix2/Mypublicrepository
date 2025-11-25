@@ -16,7 +16,7 @@ HCL -> hashicorp configuration lenguages
 ```
 
 ## Creating .tf file 
-```hcl
+```json
 resource "local_file" "foo" {
   content  = "foo!"
   filename = "${path.module}/foo.bar"
@@ -71,8 +71,7 @@ Success! The configuration is valid.
 #We must define them like "TF_VAR_myvar" TF_VAR is a reserved prefix and then our variables name 
 export TF_VAR_vpc_name="my-vpc"
 ```
-```hcl
-
+```json
 variables "vpc_name"{
   description="my vpc name"
   type=string
@@ -84,10 +83,31 @@ variables "vpc_name"{
 ```
 default="value"
 ```
-```hcl
+```json
 variables "vpc_name"{
   description="my vpc name"
   type=string
   default="my-vpc"
 }
+```
+```
+para usar: var.vpc_name 
+```
+### 3 During terraform plan or terrafom apply time
+
+```json
+variable "myvar"{
+  description="empty value variable"
+}
+```
+```
+If there are  variables without a value terraform will detect it and it will ask for their value after we execute:
+teraform plan
+terraform apply
+```
+
+### 4  Variables like parameters during terraform plan or terraform apply
+
+```shell
+terraform plan -var myvar="value"
 ```
