@@ -16,7 +16,7 @@ HCL -> hashicorp configuration lenguages
 ```
 
 ## Creating .tf file 
-```json
+```javascript
 resource "local_file" "foo" {
   content  = "foo!"
   filename = "${path.module}/foo.bar"
@@ -71,7 +71,7 @@ Success! The configuration is valid.
 #We must define them like "TF_VAR_myvar" TF_VAR is a reserved prefix and then our variables name 
 export TF_VAR_vpc_name="my-vpc"
 ```
-```json
+```javascript
 variables "vpc_name"{
   description="my vpc name"
   type=string
@@ -83,7 +83,7 @@ variables "vpc_name"{
 ```
 default="value"
 ```
-```json
+```javascript
 variables "vpc_name"{
   description="my vpc name"
   type=string
@@ -95,7 +95,7 @@ para usar: var.vpc_name
 ```
 ### 3 During terraform plan or terrafom apply time
 
-```json
+```javascript
 variable "myvar"{
   description="empty value variable"
 }
@@ -111,3 +111,4 @@ terraform apply
 ```shell
 terraform plan -var myvar="value"
 ```
+

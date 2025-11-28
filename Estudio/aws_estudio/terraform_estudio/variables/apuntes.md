@@ -36,7 +36,7 @@ create a file with empty variables and terraform will automatically assign the v
 
 https://developer.hashicorp.com/terraform/language/block/variable
 ```
-```json
+```javascript
 variable "virginia_cidr"{
     default="10.0.0.0/16"
     description = "cidr para la vpc de virginia"
@@ -62,7 +62,7 @@ type = string | number | bool | any
 list type allows non-unique items
 The items must all be of the same type
 ```
-```json
+```javascript
 variable "my_cidr_list" {
     description = "CIDR list for each region "
     type = list(string)
@@ -91,7 +91,7 @@ resource "aws_vpc" "vpc_2"{
 ```
 Tuple type is very similar to list, but tuple allows different types for its items
 ```
-```json
+```javascript
 variable "ohio"{
     type = tuple([string,bool,number])
     default = ["10.10.0.0/16",true,1]
@@ -108,7 +108,7 @@ resource "aws_vpc" "vpc_ohio"{
 
 ### map type
 
-```json
+```javascript
 variable "map_cidrs"{
     default = { 
         "c_virginia" = "10.0.0.0/16"
@@ -125,6 +125,20 @@ resource "aws_vpc" "vpc_1"{
 }
 
 ```
+```
+Apply some defaults tags to the whole defined resource in specific region
+```
+```javascript
+
+provider "aws"{
+    region="us-east-1"
+    alias=" default-region"
+    default_tags={
+        tags=var.tags
+    }
+}
+
+```
 
 ### set type
 
@@ -133,7 +147,7 @@ Set type does NOT allow non-unique items
 We can't access a specific value by index.  We must use the entire set with the for_each function and each.value 
 ```
 
-```json
+```javascript
 variable "my_cidr_set" {
     description = "CIDR set for each region "
     type = set(string)
@@ -151,7 +165,7 @@ resource "aws_vpc" "vpc"{
 ```
 Object type is very similar to the map type,  but object type allows different types for its items
 ```
-```json
+```javascript
 variable "virginia"{
     type = object({
         name = string
@@ -176,4 +190,36 @@ resource "aws_vpc" "vpc_virginia"{
         Env= var.virginia.env
     }    
 }
+```
+
+
+# Output
+
+```
+https://developer.hashicorp.com/terraform/language/block/output
+```
+
+```
+The output block exposes information about your infrastructure that you can reference on the command line, in HCP Terraform, and in other Terraform configurations that can access your configuration's state. The output block serves four main purposes in Terraform:
+
+Child modules can expose resource attributes to parent modules.
+Root modules can display values in CLI output.
+Other Terraform configurations using remote state can access root module outputs with the terraform_remote_state data source.
+Passing information from a Terraform operation to an automation tool.
+```
+
+```javascript
+output "linux_public_ip"{
+    value = aws.instance.linux.public_ip
+    description = "value= resource_type.myname.attributes_reference" 
+}
+```
+```
+To know attributes reference we can ckeck official document
+```
+```shell
+# To invoke cli output 
+terraform output
+
+terraform output linux_public_ip
 ```
