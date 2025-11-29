@@ -1,0 +1,5 @@
+FROM golang:1.24
+
+LABEL manteiner="italianodevops" version="1.0.1" description="Image to compile go projects"
+
+WORKDIR /build

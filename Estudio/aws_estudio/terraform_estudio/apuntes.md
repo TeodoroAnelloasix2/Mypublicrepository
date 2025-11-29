@@ -138,3 +138,9 @@ resource "aws_subnet" "private_subnet_virginia" {
 }
 
 ```
+# Target resources
+
+```shell
+terraform apply --target resource.logic_name
+terraform apply --target aws_subnet.public_subnet
+```
