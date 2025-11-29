@@ -112,3 +112,29 @@ terraform apply
 terraform plan -var myvar="value"
 ```
 
+# Dependencies
+```
+Terraform allows you to specify the order of resources creation using the "depends_on" clause
+```
+
+```javascript
+resource "aws_subnet" "public_subnet_virginia" {
+  vpc_id                  = aws_vpc.vpc_virginia.id
+  cidr_block              = var.public_subnet_ip
+  tags = {
+    Name      = var.tags_subnets.Name_Public_sbnet
+  }
+}
+resource "aws_subnet" "private_subnet_virginia" {
+  vpc_id     = aws_vpc.vpc_virginia.id
+  cidr_block = var.private_subnet_ip
+  tags = {
+    Name      = var.tags_subnets.Name_Private_sbnet
+  }
+
+  depends_on=[
+    aws_subnet.pulic_subnet_virginia
+  ]
+}
+
+```
