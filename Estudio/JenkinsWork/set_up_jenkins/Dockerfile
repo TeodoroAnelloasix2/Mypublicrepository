@@ -8,6 +8,12 @@ RUN apt-get update && apt-get install -y lsb-release ca-certificates curl iputil
     https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" \
     | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && apt-get install -y docker-ce-cli && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* 
+    apt-get clean && rm -rf /var/lib/apt/lists/* \
+
+WORKDIR myterraform 
+
+COPY  terraform.tar.gz .
+
+RUN  tar xvf terraform.tar.gz -C /usr/local/bin && chmod +x  /usr/local/bin/terraform
 USER jenkins
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow json-path-api"
