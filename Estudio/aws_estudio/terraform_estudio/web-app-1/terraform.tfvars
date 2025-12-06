@@ -34,6 +34,7 @@ cfg_in_rules = {
   port_http  = 80
   port_https = 443
   port_ssh   = 22
+  port_app   = 8085
   proto      = "tcp"
   Type       = "ingress"
 }
@@ -44,9 +45,9 @@ webappkey = {
 }
 
 ec2server = {
-  name = "webserver"
-  type = "t3.micro"
-  ami_code = "ami-0fa3fe0fa7920f68e"
-  init_script="init.sh"
-  ami_desc  = "Ami of amazon linux 64bits x86, uefi preferred"
+  name        = "webserver"
+  type        = "t3.micro"
+  ami_code    = "ami-0fa3fe0fa7920f68e"
+  init_script = "installdocker.sh"
+  ami_desc    = "Ami of amazon linux 64bits x86, uefi preferred"
 }

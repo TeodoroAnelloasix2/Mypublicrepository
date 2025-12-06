@@ -54,6 +54,7 @@ variable "cfg_in_rules" {
     port_http  = number
     port_https = number
     port_ssh   = number
+    port_app   = number
     proto      = string
     cidr_block = list(string)
   })
@@ -68,11 +69,11 @@ variable "webappkey" {
 
 variable "ec2server" {
   type = object({
-    name    = string
-    ami_code = string
-    type    = string
-    ami_desc=string
-    init_script=string
+    name        = string
+    ami_code    = string
+    type        = string
+    ami_desc    = string
+    init_script = string
   })
 
 }
