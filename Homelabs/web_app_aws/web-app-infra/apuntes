@@ -1,0 +1,3 @@
+ssh -i webappkey.pem ec2-user@public_ip
+terraform apply -var my_ip="$(curl -s ifconfig.me)/32" -auto-approve
+terraform destroy -var my_ip="$(curl -s ifconfig.me)/32" -auto-approve

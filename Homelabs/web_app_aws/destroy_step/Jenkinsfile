@@ -1,0 +1,22 @@
+pipeline {
+    agent {label 'master'}
+    environment {
+        AWS_ACCESS_KEY_ID  = credentials('access_key_id')
+        AWS_SECRET_ACCESS_KEY = credentials('secret_key')
+        AWS_REGION = 'us-east-1'
+    }
+    stages{
+        stage('Destroy'){
+            steps{
+                dir('/var/jenkins_home/workspace/Web-app-infra/web-app-infra'){
+                sh '''
+                    terraform init
+                    sleep 2
+                    MY_IP=$(curl -s ifconfig.me)/32
+                    terraform destroy -var "my_ip=$MY_IP" -auto-approve
+                '''
+                }
+            }
+        }
+    }
+}
