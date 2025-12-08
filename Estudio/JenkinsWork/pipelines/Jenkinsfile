@@ -1,0 +1,60 @@
+pipeline {
+   agent {label 'master'}
+   environment {
+    DOCKERHUB_CREDENTIALS=credentials('dockerhub_cred')
+    AWS_ACCESS_KEY_ID  = credentials('access_key_id')
+    AWS_SECRET_ACCESS_KEY = credentials('secret_key')
+    AWS_REGION = 'us-east-1'
+   }
+   stages {
+        stage('Build Image'){
+            steps{
+                sh 'ls; docker build -t $DOCKERHUB_CREDENTIALS_USR/simplewebapp:$BUILD_NUMBER simplewebapp'
+            }
+        }
+        stage('Login Dockerhub'){
+            steps{
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+        stage('Push image'){
+            steps{
+                sh 'docker push $DOCKERHUB_CREDENTIALS_USR/simplewebapp:$BUILD_NUMBER'
+            }
+        }
+        stage('Deploy image'){
+            steps{
+                withCredentials([sshUserPrivateKey(credentialsId: 'webappkey',keyFileVariable: 'PEM', usernameVariable: 'USER')]){
+                       script{
+                        dir('/var/jenkins_home/workspace/Deploy-web-app-infra/web-app-infra'){
+                            
+                                def EC2_IP = readFile('webserverip').trim()
+                            sshCommand([
+                                remote: [
+                                name: 'webserver',
+                                host: EC2_IP,
+                                user: USER,
+                                identityFile: PEM,
+                                allowAnyHosts: true
+                            ],
+                            command: """ 
+                                docker pull $DOCKERHUB_CREDENTIALS_USR/simplewebapp:$BUILD_NUMBER && \
+                                docker stop simplewebapp || true && \
+                                docker rm simplewebapp || true && \
+                                docker run --name simplewebapp -p 80:8085 -d --restart unless-stopped  $DOCKERHUB_CREDENTIALS_USR/simplewebapp:$BUILD_NUMBER
+                                    """ 
+                            ])
+                        }
+                    }
+                        
+                }
+            }
+        }
+        
+   }
+   post {
+    always {
+        sh 'docker logout'
+    }
+   }
+}
