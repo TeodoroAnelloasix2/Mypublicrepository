@@ -75,3 +75,61 @@ terraform state mv packet_device.worker packet_device.helper
 # We move the state so that the existing resource is associated with the new instance.
 ```
 
+# Destroy
+
+```shell
+terraform destroy # Delete the whole infraestructure
+terraform destroy --target=aws_instance.my_instance # Delete just specified target
+```
+
+# taint
+
+### Deprecated (specify --replace instead)
+```shell
+# The terraform taint command marks specified objects in the Terraform state as tainted. Use the terraform taint command when objects become degraded or damaged. Terraform prompts you to replace the tainted objects in the next plan you create.
+
+terraform list
+#output:
+aws_instance.webserver
+
+terraform taint aws_instance.webserver
+#Resource instance aws_instance.webserver has been marked as tainted.
+terraform untaint aws_instance.webserver
+#Resource instance aws_instance.webserver has been successfully untainted.
+
+terraform plan --replace aws_instance.webserver 
+```
+
+# Import
+
+```shell
+# The terraform import command imports existing resources into Terraform.
+
+terraform import 
+terraform import aws_instance.foo i-abcd1234
+
+# How to import manually created ec2
+# Define empty resource
+```
+```javascript
+resource "aws_instance" "myec2" {
+}
+```
+```shell
+terraform import aws_instace.myec2 i-03098cb47a04eXXXXXX
+
+#output:
+terraform import aws_instance.myec2 i-03098cb47aXXX
+aws_instance.myec2: Importing from ID "i-03098cb47a04e9381"...
+aws_instance.myec2: Import prepared!
+  Prepared aws_instance for import
+aws_instance.myec2: Refreshing state... [id=i-03098cb47a0XXXXx]
+
+Import successful!
+
+The resources that were imported are shown above. These resources are now in
+your Terraform state and will henceforth be managed by Terraform.
+
+# Then we can do terraform state show aws_instace.myec2 to display the resource's information. We can copy and paste usefull information into defined empty resource
+
+```

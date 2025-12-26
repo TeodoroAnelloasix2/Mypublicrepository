@@ -144,3 +144,82 @@ resource "aws_subnet" "private_subnet_virginia" {
 terraform apply --target resource.logic_name
 terraform apply --target aws_subnet.public_subnet
 ```
+
+# Diagram page
+
+```
+draw.io 
+```
+
+# lifecycle
+```
+Lifecycle arguments help control the flow of your Terraform operations by creating custom rules for resource creation and destruction. Instead of Terraform managing operations in the built-in dependency graph, lifecycle arguments help minimize potential downtime based on your resource needs as well as protect specific resources from changing or impacting infrastructure.
+
+```
+```javascript
+// Create our web server
+resource "aws_instance" "example" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.sg_web.id]
+  user_data              = <<-EOF
+              #!/bin/bash
+              apt-get update
+              apt-get install -y apache2
+              sed -i -e 's/80/8080/' /etc/apache2/ports.conf
+              echo "Hello World" > /var/www/html/index.html
+              systemctl restart apache2
+              EOF
+  tags = {
+    Name          = "terraform-learn-state-ec2"
+    drift_example = "v1"
+  }
+// Implements lifecycle
+lifecycle {
+  prevent_destroy = true 
+ }
+}
+
+//lyfecycle arguments
+ignore_changes        = [tags,ami] //Ignore changes in the specified resources attributes
+create_before_destroy = true //Change terraform's default behavior: , first create the new resource, then destroy the old one (normally the opposite)
+replace_triggered_by=[aws_subnet.private_subnet,aws_subnet.private_subnet.id] // Changes in the specified resource will trigger a replacement of this resource
+```
+
+# Data
+```
+Data block requests that Terraform read from a given data source and export the result under the given local name. 
+The name is used to refer to this resource from elsewhere in the same Terraform module, but has no significance outside of the scope of a module.
+```
+```javascript
+data "aws_key_pair" "key" {
+  key_name = "mykey"
+}
+```
+```javascript
+resource "aws_instance" "ec2_amazon_linux" {
+  ami           = "xxxxxxxxxxxxx"
+  instance_type = "t3.micro"
+  subnet_id     = aws_subnet.public_subnet_virginia.id
+  key_name = data.aws_key_pair.key.key_name // To use data info
+}
+
+```
+
+# Enable Terraform logs
+
+``` shell
+Debug levels
+
+Info       
+Warning
+Error
+Debug
+Trace      higest verbosity
+
+# How to enable logs
+# set debug level
+export TF_LOG=TRACE
+# set logs file
+export TF_LOG_PATH=terraformlogs.txt
+```

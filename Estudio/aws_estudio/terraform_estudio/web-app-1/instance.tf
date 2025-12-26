@@ -24,3 +24,24 @@ resource "aws_instance" "webserver" {
     Name = var.ec2server.name
   }
 }
+
+
+# To test import
+resource "aws_instance" "myec2" {
+    ami                                  = "ami-068c0051b15cdb816"
+    
+    associate_public_ip_address          = true
+    availability_zone                    = "us-east-1a"
+    
+    instance_type                        = "t3.micro"
+    key_name                             = "mykey"
+    region                               = "us-east-1"
+    subnet_id                            = "subnet-04b57ca81558a1004"
+    tags                                 = {
+        "Name" = "myec2"
+        "Imported"="true"
+    }
+    vpc_security_group_ids               = [
+        "sg-0e985a1ab4276b807",
+     ]
+}

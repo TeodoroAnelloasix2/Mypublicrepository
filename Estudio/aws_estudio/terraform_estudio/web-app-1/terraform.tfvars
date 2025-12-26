@@ -14,6 +14,7 @@ public_sbnt_config = {
   cidr   = "10.0.1.0/24"
   maping = true
   name   = "wa1pubsubnt"
+  az     = "us-east-1a"
 }
 
 config_igtw = {

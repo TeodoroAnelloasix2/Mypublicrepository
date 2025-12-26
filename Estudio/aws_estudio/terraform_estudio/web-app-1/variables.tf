@@ -21,6 +21,7 @@ variable "public_sbnt_config" {
     cidr   = string
     maping = bool
     name   = string
+    az     = string
   })
 }
 

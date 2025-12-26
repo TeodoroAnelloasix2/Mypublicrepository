@@ -14,6 +14,7 @@ resource "aws_subnet" "wa1_public_sbnt" {
   vpc_id                  = aws_vpc.wa1_vpc.id
   cidr_block              = var.public_sbnt_config.cidr
   map_public_ip_on_launch = var.public_sbnt_config.maping
+  availability_zone       = var.public_sbnt_config.az
   tags = {
     Name = var.public_sbnt_config.name
   }
