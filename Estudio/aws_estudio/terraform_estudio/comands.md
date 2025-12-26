@@ -130,6 +130,55 @@ Import successful!
 The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 
-# Then we can do terraform state show aws_instace.myec2 to display the resource's information. We can copy and paste usefull information into defined empty resource
+# Then we can do terraform state show aws_instace.myec2 to display the resource's information. We can copy and paste usefull information into the previously defined resource block.
 
+```
+
+# Workspace
+
+```shell
+# To list current workspace
+
+terraform workspace list
+* default
+
+#To create new workspace
+terraform workspace new myworkspace
+
+# To change current workspace
+
+terraform workspace select myworkspace
+```
+
+# How to deploy into different workspace
+```shell
+terraform workspace new dev
+terraform workspace new prod
+
+terraform workspace select prod
+```
+
+```javascript
+
+variable "my_cidrs"{
+  type = map[string]
+}
+
+my_cidrs = {
+  prod = "10.0.1.0/16"
+  dev = "10.0.2.0/16"
+}
+
+resource "aws_vpc" "vpc_virginia"{
+  cidr_block = lookup(var.my_cidrs,terraform.workspace,"not found")
+}
+```
+
+# Console 
+
+```shell
+#The terraform console command opens an interactive console for evaluating expressions.
+terraform console
+
+# Terraform provides many useful built-in functions for data transformation and logic
 ```
