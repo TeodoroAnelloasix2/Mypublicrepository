@@ -1,0 +1,16 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~>6.22.1"
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+  alias  = "nvirginia"
+  default_tags {
+    tags = var.def_tags
+  }
+}
