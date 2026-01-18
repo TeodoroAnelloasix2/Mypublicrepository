@@ -3,7 +3,7 @@ resource "aws_security_group" "wa1_sg" {
   vpc_id = aws_vpc.wa1_vpc.id
   description = "Security group for web server instance"
 
-  # Dynamic block for the specified resource
+  # Dynamic block
   dynamic "ingress" {
     for_each = var.ingress_port_list
     content {
