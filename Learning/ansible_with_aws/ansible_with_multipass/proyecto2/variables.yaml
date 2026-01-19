@@ -1,0 +1,7 @@
+mariadb_root_password: "password1234"
+
+wordpress_user_password: "password1234"
+
+mariadb_hosts:
+  - 10.74.206.176
+  - 10.74.206.226

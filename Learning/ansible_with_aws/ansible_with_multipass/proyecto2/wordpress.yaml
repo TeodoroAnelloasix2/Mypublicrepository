@@ -1,0 +1,222 @@
+- name: Wordpress
+  hosts: demo
+  become: true
+  gather_facts: false
+  
+  vars_files:
+      - variables.yaml # Incluir archivos con las variables
+    
+
+  tasks:
+  #  - name: Print facts
+  #    ansible.builtin.debug:
+  #      var: ansible_facts   # Recoge info de host e imprimir por terminal
+    - name: Update packeages
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist # Update y upgrade de paquetes
+
+    - name: Install apache2
+      ansible.builtin.apt:
+        name: apache2
+        state: present # Present para instalar
+
+    - name: Start apaceh service
+      ansible.builtin.systemd_service:
+        name: apache2
+        state: started # Arrancar  un demonio
+        enabled: true # Arrancar el demonio con la maquina si se ejecuta un reboot
+
+    - name: Install dependencies # Instalamos las dependencies con un loop para cada paquete requerido
+      ansible.builtin.apt: 
+        name: "{{ item }}"
+        state: present
+      loop:
+        - php
+        - php-common
+        - ghostscript
+        - libapache2-mod-php
+        - php-bcmath
+        - php-curl
+        - php-imagick
+        - php-intl
+        - php-json
+        - php-mbstring
+        - php-mysql
+        - php-xml
+        - php-zip
+        - php-cli
+        - php-dev
+        - php-imap
+        - php-opcache
+        - php-soap
+        - php-zip
+        - php-intl
+        - php-xml
+        - php-xmlrpc
+        - php-gd
+    # tags: name_tag   ansible-playbook archivo.yaml --tags "name_tag,name_tag2 etc.." ejecutar solo una task en concreto 
+    - name: Install Database
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - mariadb-server
+        - mariadb-client
+      tags: MDB
+
+    - name: Start MariaDB
+      ansible.builtin.systemd_service:
+        name: mariadb
+        state: started
+        enabled: true
+      tags: Start_DB
+    
+    - name: Python dependencies
+      ansible.builtin.apt:
+        name:
+          - python3-pip
+          - python3-dev
+          - libmysqlclient-dev
+        state: present
+      tags: task1 
+
+    - name: Install mysqlclient via pip 
+      ansible.builtin.pip:
+        name: mysqlclient
+        state: present
+        extra_args: --break-system-packages # "Force" ignorar error PEP 668 externally managed
+      tags: task2
+    
+    
+      
+    - name: Set MariaDB root password
+      community.mysql.mysql_user:
+        name: root
+        host: localhost
+        password: "{{ mariadb_root_password }}"
+        login_user: root
+        login_password: ""
+        priv: "*.*:ALL,GRANT"
+        state: present
+      ignore_errors: true # Si repetimos todas las tareas ignoramos error  
+      tags: setpasswdmariadb
+
+    - name: Remove anonymous MariaDB users
+      community.mysql.mysql_user:
+        name: ""
+        host_all: yes
+        login_user: root
+        login_password: "{{ mariadb_root_password }}" # External yaml file setted
+        state: absent
+    
+    - name: Disallow root login remotely 
+      community.mysql.mysql_user:
+        name: root
+        host: "{{ item }}"
+        login_user: root
+        login_password: "{{ mariadb_root_password }}"
+        state: absent
+      loop:
+        - "{{ mariadb_hosts  | union(['::1', '%']) }}"
+
+    - name: Remove test database
+      community.mysql.mysql_db:
+        name: test
+        state: absent
+        login_user: root
+        login_password: "{{ mariadb_root_password }}"
+      tags: deletetestdatabase
+    
+    - name: Reload privilege tables
+      ansible.builtin.command: mysql -u root -p"{{ mariadb_root_password }}" -e "FLUSH PRIVILEGES"
+      tags: flushprivileges
+    
+    - name: Add wordpressdb
+      community.mysql.mysql_db:
+        name: wordpress_db
+        state: present
+        login_user: root
+        login_password: "{{ mariadb_root_password }}"
+        state: present
+      tags: wpdb
+    
+    - name: Add woprdpress user & passwd
+      community.mysql.mysql_user:
+        name: wordpress
+        host: localhost
+        password: "{{ wordpress_user_password }}"
+        login_user: root
+        login_password: "{{ mariadb_root_password }}"
+        priv: "wordpress_db.*:ALL"
+        state: present
+      ignore_errors: true
+      tags: wpuserpassword
+    
+    - name: Download wordpress
+      ansible.builtin.get_url:
+        url: https://wordpress.org/wordpress-6.7.2.tar.gz
+        dest: /tmp/wordpress-6.7.2.tar.gz
+      tags: downloadwp
+    
+    - name: Unarchive Wordpress
+      ansible.builtin.unarchive:
+        src: /tmp/wordpress-6.7.2.tar.gz
+        dest: /var/www/html
+        remote_src: yes
+      tags: unzipwp
+    
+    - name: Generate wordpress config
+      ansible.builtin.copy:
+        remote_src: true
+        src: /var/www/html/wordpress/wp-config-sample.php
+        dest: /var/www/html/wordpress/wp-config.php
+    
+    - name: Change permissions
+      ansible.builtin.file:
+        path: /var/www/html/wordpress
+        mode: "0755"
+        owner: www-data
+        group: www-data
+    
+    - name: Change wp-config
+      ansible.builtin.lineinfile:
+        path: /var/www/html/wordpress/wp-config.php
+        regexp: "{{ item.regexp }}"
+        line : "{{ item.line }}"
+        state: present
+      loop:
+        - { regexp: "database_name_here",line: "define( 'DB_NAME', 'wordpress_db' );"}
+        - { regexp: "username_here",line: "define( 'DB_USER', 'wordpress' );"}
+        - { regexp: "password_here",line: "define( 'DB_PASSWORD', '{{wordpress_user_password}}' );"}
+      tags: contentwpconfigphp
+  
+    - name: Add wordpress security-key salt
+      ansible.builtin.shell: |
+        curl -s https://api.wordpress.org/secret-key/1.1/salt/ >> /var/www/html/wordpress/wp-config.php
+
+    - name: Generate Wordpress apache conf
+      ansible.builtin.copy:
+        remote_src: true
+        src: /etc/apache2/sites-available/000-default.conf
+        dest: /etc/apache2/sites-available/wordpress.conf
+    
+    - name: Change wordpress DocumentRoot
+      ansible.builtin.lineinfile:
+        path: /etc/apache2/sites-available/wordpress.conf
+        regexp: "/var/www/html"
+        line: "DocumentRoot /var/www/html/wordpress"
+        state: present
+
+    - name: Enable wordpress site
+      ansible.builtin.shell: | 
+        a2ensite  wordpress.conf
+        a2dissite 000-default.conf
+      args:
+        chdir:  /etc/apache2/sites-available/
+     
+    
+    - name: restart apache2
+      ansible.builtin.systemd_service:
+        name: apache2
+        state: restarted

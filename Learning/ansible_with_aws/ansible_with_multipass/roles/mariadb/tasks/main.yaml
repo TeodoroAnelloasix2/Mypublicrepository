@@ -1,0 +1,58 @@
+# tags: name_tag   ansible-playbook archivo.yaml --tags "name_tag,name_tag2 etc.." ejecutar solo una task en concreto 
+- name: Install Database
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - mariadb-server
+    - mariadb-client
+  tags: MDB
+
+  notify: Start MariaDB Service #llamar a una tarea en handler
+
+- name: Install python dependencies
+  ansible.builtin.import_tasks: python_dendencies.yaml # llamar otra task
+
+
+- name: Set MariaDB root password
+  community.mysql.mysql_user:
+    name: root
+    host: localhost
+    password: "{{ wp_db_root_password }}"
+    login_user: root
+    login_password: ""
+    priv: "*.*:ALL,GRANT"
+    state: present
+  ignore_errors: true # Si repetimos todas las tareas ignoramos error  
+  tags: setpasswdmariadb
+
+- name: Remove anonymous MariaDB users
+  community.mysql.mysql_user:
+    name: ""
+    host_all: true
+    login_user: root
+    login_password: "{{ wp_db_root_password }}" # External yaml file setted
+    state: absent
+
+- name: Disallow root login remotely 
+  community.mysql.mysql_user:
+    name: root
+    host: "{{ item }}"
+    login_user: root
+    login_password: "{{ wp_db_root_password }}"
+    state: absent
+  loop:
+    - "{{ mariadb_hosts  | union(['::1', '%']) }}"
+
+- name: Remove test database
+  community.mysql.mysql_db:
+    name: test
+    state: absent
+    login_user: root
+    login_password: "{{ wp_db_root_password }}"
+  tags: deletetestdatabase
+
+
+- name: Reload privilege tables
+  ansible.builtin.command: mysql -u root -p"{{ wp_db_root_password }}" -e "FLUSH PRIVILEGES"
+  tags: flushprivileges

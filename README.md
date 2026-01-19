@@ -1,22 +1,40 @@
 # Mypublicrepository
 
 
-## Proyectos que son míos
+## This repository is divided in three section:
 
-### Los proyectos en Herramientas_mias son proyectos personales de fin de semana
-### Lee los readme.md que encontrarás para saber más sobre las herramientas
-
-```
-Herramientas_mias / gospy
-
-Aplicación web en Go que monitoriza los recursos del sistema.
-
-En fase de desarrollo la  versión Docker de la misma.
-```
+### Learning
 
 ```
-Herramientas_mias / upjenk 
-Aplicación de terminal para gestionar un servidor con Jenkins.
+In this section i share my notes about the technology i am learning.
+```
 
-En fase de mejora ....
+### Homelabs
+
+```
+In this section, I share my “home labs.” 
+```
+
+### My_developed_tools
+
+```
+In this section, I share the tools I develop. 
+```
+
+```
+My_developed_tools / gospy
+
+Web application developed with Go. This tool monitors CPU and RAM usage.
+
+There are two versions:
+
+- Host based version
+- Containerized version 
+
+```
+
+```
+My_developed_tools / upjenk 
+
+Tool that assists in Jenkins management
 ```

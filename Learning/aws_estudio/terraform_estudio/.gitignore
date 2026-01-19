@@ -1,0 +1,10 @@
+web-app-1/webappkey.pem
+web-app-1/apuntes
+*/.terraform
+*/.terraform.lock.hcl
+*/terraform.tfstate
+*/terraform.tfstate.backup
+web-app/gospy.tar.gz
+*/webappkey.pem
+*/*.pem
+*/*/*.pem
