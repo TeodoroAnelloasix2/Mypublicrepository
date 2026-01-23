@@ -4,7 +4,7 @@
 ## Requirements for managed nodes
 
 ```
-- Python
+- Python3
 - Configured ssh
 - User with sudo  privileges
 ```
