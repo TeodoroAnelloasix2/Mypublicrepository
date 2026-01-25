@@ -6,7 +6,7 @@
 ```
 This configuration settings file called ansible.cfg allow users to set ansible's behavior
 ```
-### Location-base prority
+### Location-based prority
 
 1. Environment variable "ANSIBLE_CONFIG"
 2. Current directory Ansible.cfg
