@@ -22,4 +22,4 @@ sudo chmod 600 /home/ansible/.ssh/authorized_keys
 
 for us in $(ls /home);do sudo -u "$us"  echo "export TERM=xterm" >> "/home/$us/.bashrc";done
 
-sudo echo  "ansible ALL=(ALL)	NOPASSWD: ALL" >>  "/etc/sudoers" 
+sudo echo  "ansible ALL=(ALL)	NOPASSWD: ALL" >>  "/etc/sudoers"

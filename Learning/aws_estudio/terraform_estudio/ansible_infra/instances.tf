@@ -21,6 +21,8 @@ variable "servers" {
     ubuntu_slave2 = "ubuntu"
     aws_slave3    = "aws_linux"
     aws_slave4    = "aws_linux"
+    mysql1        = "ubuntu"
+    mysql2        = "ubuntu"
   }
 }
 

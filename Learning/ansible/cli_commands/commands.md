@@ -74,7 +74,7 @@ Installs, upgrade, downgrades, removes, lists etc...
 
 ```shell
 ansible 100.* -i server_list -u user  --key-file key.pem -m yum -a "name=httpd state=present"  -b
-# use -b or --become-user=root to run the operations as root 
+# use -b or --become or -b --become-user=root to run the operations as root 
 
 -m yum -a "name=mariadb105-devel.x86_64 state=present"  --become-user='root' -b
 

@@ -1,2 +1,6 @@
 master_key/*
-cli_commands/inventory.ini
+
+*/inventory.yaml
+*/inventory
+*/inventory.ini
+.vscode
