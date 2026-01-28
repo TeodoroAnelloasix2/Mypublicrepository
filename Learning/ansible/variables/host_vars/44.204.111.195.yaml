@@ -1,0 +1,2 @@
+ansible_user: pepe
+bbdd_port:    3306

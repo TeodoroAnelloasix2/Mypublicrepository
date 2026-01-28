@@ -1,6 +1,7 @@
 # Playbooks
 
 ```
+Ansible Playbooks provide a repeatable, reusable, simple configuration management and multimachine deployment system that is well suited to deploying complex applications.
 ```
 
 ```javascript
@@ -23,9 +24,9 @@ Playbook
 
 * Hosts    -> Target hosts
 * Vars     -> Variables used by the current play
-* Tasks    -> actions to execute in target hosts
-* Handlers -> task that only will be executed if any changes os detected
-* Roles    -> 
+* Tasks    -> Ansible modules to execute in target hosts
+* Handlers -> Handlers are special tasks triggered by notify
+* Roles    -> Group of resources that allow user to easily reuse them
 
 
 ### Simple playbook example
@@ -71,4 +72,24 @@ Playbook
 
 ```shell
 ansible-playbook mi_playbook.yaml
+```
+
+
+### Import task from another playbook
+
+```yaml
+# external_task.yaml
+
+- name: Ping test
+  ansible.builtin.ping:
+
+
+# my_playbook
+
+- name: Execute imported task
+  hosts: all
+  remote_user: my_user
+  tasks:
+  - name: Ping test
+    include_tasks: external_task.yaml
 ```

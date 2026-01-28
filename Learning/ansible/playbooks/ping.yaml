@@ -6,3 +6,11 @@
   tasks:
   - name: Ping test
     ansible.builtin.ping:
+
+- name: Create file in aws servers
+  hosts: aws_linux
+  remote_user: ansible
+  tasks:
+  - name: Create file
+    ansible.builtin.shell:
+      touch /tmp/file_example

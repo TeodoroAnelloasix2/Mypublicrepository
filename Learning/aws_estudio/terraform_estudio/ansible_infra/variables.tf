@@ -73,6 +73,11 @@ variable "amis_code" {
   type = map(string)
 }
 
+# Init scripts
+
+variable "scripts" {
+  type = map(string)
+}
 #####
 
 # instances

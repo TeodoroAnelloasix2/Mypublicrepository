@@ -1,0 +1,47 @@
+---
+- name: Install apache on ubuntu servers
+  hosts: ubuntu_server
+  become: true
+  become_user: root
+  tasks:
+  - name: Installing apache
+    ansible.builtin.apt:
+      name: apache2
+      state: present
+      update_cache: true
+
+  - name: Start apache server
+    ansible.builtin.service:
+      name: apache2.service
+      state: reloaded
+
+- name: Install bbdd on mysql servers
+  hosts: mysql
+  become: true
+  become_user: root
+  tasks:
+  - name: Install mysql-server
+    ansible.builtin.apt:
+      name: mysql-server
+      state: present
+      update_cache: true
+  - name: Start mysql service
+    ansible.builtin.service:
+      name: mysql.service
+      state: started
+
+- name: Install nginx on aws aws_linux
+  hosts: aws_linux
+  become: true
+  become_user: root
+  tasks:
+  - name: Install nginx
+    ansible.builtin.yum:
+      name: nginx
+      state: present
+      update_cache: true
+  
+  - name: Start nginx
+    ansible.builtin.service:
+      name: nginx
+      state: started

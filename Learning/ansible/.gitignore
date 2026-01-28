@@ -4,3 +4,4 @@ master_key/*
 */inventory
 */inventory.ini
 .vscode
+*/.vscode

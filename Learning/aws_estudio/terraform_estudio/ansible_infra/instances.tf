@@ -8,10 +8,16 @@ resource "aws_key_pair" "ssh_key" {
   key_name   = var.key_name
   public_key = tls_private_key.ansi_key.public_key_openssh
   provisioner "local-exec" {
-    command = "echo '${tls_private_key.ansi_key.private_key_openssh}' > ./${var.key_name}.pem && chmod 400 ${var.key_name}.pem "
+    command = "echo '${tls_private_key.ansi_key.private_key_openssh}' > ./${var.key_name}.pem && chmod 400 ${var.key_name}.pem"
   }
 }
 
+resource "random_string" "key_sfx" {
+  length  = 6
+  special = false
+  numeric = false
+  upper   = false
+}
 ######
 variable "servers" {
   description = "List of servers ubuntu"
@@ -23,6 +29,8 @@ variable "servers" {
     aws_slave4    = "aws_linux"
     mysql1        = "ubuntu"
     mysql2        = "ubuntu"
+    redhat1       = "redhat"
+    redhat2       = "redhat"
   }
 }
 
@@ -31,10 +39,11 @@ resource "aws_instance" "servers" {
   ami                         = var.amis_code[each.value]
   instance_type               = var.my_ec2_type
   subnet_id                   = aws_subnet.pblc_subnet.id
-  key_name                    = var.key_name
+  key_name                    = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids      = [aws_security_group.sg_ansible.id]
   associate_public_ip_address = true
-  user_data                   = strcontains(each.value, "aws") ? file(var.aws_init_script) : file(var.ubuntu_init_script)
+  user_data                   = strcontains(each.value, "ubuntu") ? file(var.ubuntu_init_script) : file(var.aws_init_script)
+  #user_data = var.scripts[each.value]
   tags = {
     Name = "${each.key}-${random_string.ec2_sfx[each.key].result}"
   }

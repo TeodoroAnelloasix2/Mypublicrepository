@@ -1,0 +1,14 @@
+---
+- name: Modify nginx default page
+  hosts: aws_linux
+  become: true
+  become_user: root
+  tasks:
+
+  - name: Copy index.html
+    ansible.builtin.copy:
+      src: ./recursos/index.html
+      dest:  /usr/share/nginx/html/index.html
+      owner: root
+      group: ansible
+      mode: '0744'

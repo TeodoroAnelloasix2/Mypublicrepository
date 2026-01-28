@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nginx – Italy Style</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(
+        90deg,
+        #008C45 0%,
+        #008C45 33%,
+        #F4F5F0 33%,
+        #F4F5F0 66%,
+        #CD212A 66%,
+        #CD212A 100%
+      );
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px 50px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+      max-width: 420px;
+    }
+
+    h1 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    p {
+      color: #555;
+      font-size: 1.1em;
+    }
+
+    .flag {
+      display: flex;
+      width: 180px;
+      height: 110px;
+      margin: 25px auto;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .flag div {
+      flex: 1;
+    }
+
+    .green { background: #008C45; }
+    .white { background: #F4F5F0; }
+    .red   { background: #CD212A; }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 0.85em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Nginx is running 🚀</h1>
+    <p>Your server is up and serving content</p>
+
+    <div class="flag">
+      <div class="green"></div>
+      <div class="white"></div>
+      <div class="red"></div>
+    </div>
+
+    <div class="footer">
+      Deployed with Ansible · 🇮🇹
+    </div>
+  </div>
+</body>
+</html>

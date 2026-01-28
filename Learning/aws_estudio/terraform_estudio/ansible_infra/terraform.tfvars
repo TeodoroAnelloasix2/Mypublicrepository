@@ -40,6 +40,12 @@ amis_code = {
   ubuntu    = "ami-0c398cb65a93047f2"
 }
 
+# inits_scripts
+
+scripts = {
+  "ubuntu"    = "ubuntu_init.sh"
+  "aws_linux" = "aws_init.sh"
+}
 # instances
 
 my_ec2_type = "t3.micro"

@@ -1,0 +1,6 @@
+---
+- name: Import external tasks
+  hosts: all
+  tasks:
+  - name: Test connection
+    include_tasks: shared_tasks.yaml

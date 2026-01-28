@@ -138,7 +138,6 @@
         state: present
         login_user: root
         login_password: "{{ mariadb_root_password }}"
-        state: present
       tags: wpdb
     
     - name: Add woprdpress user & passwd
