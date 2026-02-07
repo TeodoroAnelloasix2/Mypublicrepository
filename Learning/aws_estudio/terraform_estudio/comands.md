@@ -182,3 +182,76 @@ terraform console
 
 # Terraform provides many useful built-in functions for data transformation and logic
 ```
+
+
+# Infracost 
+
+```
+Infracost is a useful tool which allow us to know an estimated cost of our infraestructure
+```
+```shell
+# Get latest version
+curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
+# Check that it works correctly:
+infracost --version
+
+# Register to use the free api key tool used to retrieve prices for deployed components
+infracost auth login
+
+# Get costs
+
+infracost breakdown --path /path/to/our/project
+```
+
+# Tfsec
+
+```
+Tfsec is an analysis security scanner  which allow users to detect security issue in our terraform code
+```
+
+```shell
+# Get latest version
+curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash 
+
+# Run analysis
+tfsec /path/to/tf_code
+```
+
+
+
+# tfenv
+
+```
+tfenv is a terraform version manager
+```
+
+```shell
+# List available terraform versions
+tfenv list-remote
+
+# install specified terraform version
+tfenv install 1.0.7
+
+# list terraform version managed by tfenv
+tfenv list
+
+# Set terraform version to use
+tfenv use 1.0.7
+
+# List commands options 
+tfenv
+
+tfenv 3.0.0
+Usage: tfenv <command> [<options>]
+
+Commands:
+   install       Install a specific version of Terraform
+   use           Switch a version to use
+   uninstall     Uninstall a specific version of Terraform
+   list          List all installed versions
+   list-remote   List all installable versions
+   version-name  Print current version
+   init          Update environment to use tfenv correctly.
+   pin           Write the current active version to ./.terraform-version
+
+```

@@ -1,0 +1,14 @@
+--- 
+- name: Work with dictionaries
+  hosts: mysql
+  vars:
+    des_features:
+      type: linux 
+      mem: 4GB
+      disk: 250GB
+
+  tasks:
+  - name: Gather des info
+    debug:
+      msg: "Features: {{des_features}} Free disk: {{des_features['disk']}} Type: {{des_features.type}}"
+      

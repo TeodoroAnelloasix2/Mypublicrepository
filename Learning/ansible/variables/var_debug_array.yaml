@@ -1,0 +1,18 @@
+---
+- name: Test with variables
+  hosts: redhat_srv
+  vars:
+    msg_prefix: "Node name: "
+    # How to Create an array
+    my_environments: 
+      - des
+      - testing
+      - prod
+
+  tasks:
+  - name: Gather info
+    debug:
+      msg: "{{msg_prefix}} {{ ansible_facts['nodename']}}  Environment: {{my_environments}}"
+  - name: working with array
+    debug:
+      msg: "The fist environment is: {{my_environments[0]}}"
