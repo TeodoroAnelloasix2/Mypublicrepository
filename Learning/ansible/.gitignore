@@ -5,3 +5,4 @@ master_key/*
 */inventory.ini
 .vscode
 */.vscode
+variables/info_mysql.json

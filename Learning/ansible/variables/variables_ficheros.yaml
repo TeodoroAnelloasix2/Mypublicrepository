@@ -1,0 +1,10 @@
+---
+- name: External variables file
+  hosts: mysql
+  vars_files: 
+    - my_vars_dir/my_vars_file.yaml
+  
+  tasks:
+  - name: Message form external vars file
+    debug:
+      msg: "Value --> {{ my_msg }}" 

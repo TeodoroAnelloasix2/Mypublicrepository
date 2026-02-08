@@ -12,3 +12,6 @@ web-app/gospy.tar.gz
 */.infracost
 ansible_infra/aws_init.sh
 ansible_infra/ubuntu_init.sh
+*/inventory
+*/inventory.yaml
+

@@ -1,0 +1,47 @@
+---
+- name: How to use ansible_facts variables 
+  hosts: mysql
+  # Disable default gathering facts
+  # gather_facts: no 
+  
+  tasks: 
+  - name: Display info with msg
+    debug:
+      msg: "Architecture: {{ ansible_facts['architecture']}} Ipv4: {{ansible_facts['default_ipv4'].address}} Processor: {{ansible_facts['processor'][2]}}"
+  
+  - name: Display info with var
+    debug:
+      var: "All network info:  {{ ansible_facts.default_ipv4 }} Some specified property: {{ ansible_facts.default_ipv4.interface }} "
+
+# Notes 
+# To use ansible_facts variables we have to put the prefix: "ansible_facts"
+# followed by the property without the prefix: "ansible_"
+
+# Example : 
+
+# ansible_distribution --> {{ ansible_facts['distribution']}}
+
+# ansible_distribution --> {{ ansible_facts.distribution }}
+
+# "ansible_processor": [
+        #     "0",
+        #     "GenuineIntel",
+        #     "Intel(R) Xeon(R) Platinum 8259CL CPU @ 2.50GHz",
+        #     "1",
+        #     "GenuineIntel",
+        #     "Intel(R) Xeon(R) Platinum 8259CL CPU @ 2.50GHz"
+        # ]
+
+# "ansible_default_ipv4": {
+#             "address": "10.0.1.81",
+#             "alias": "ens5",
+#             "broadcast": "",
+#             "gateway": "10.0.1.1",
+#             "interface": "ens5",
+#             "macaddress": "02:68:ef:ba:ff:81",
+#             "mtu": 9001,
+#             "netmask": "255.255.255.0",
+#             "network": "10.0.1.0",
+#             "prefix": "24",
+#             "type": "ether"
+#         }

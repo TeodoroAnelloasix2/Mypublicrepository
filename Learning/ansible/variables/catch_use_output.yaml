@@ -1,0 +1,37 @@
+---
+- name: Catch ans display output variables
+  hosts: mysql
+
+  tasks:
+  - name: Catch date
+    shell:
+      cmd: date  # cmd command to execute
+    register: my_date # Variable where i store the returned object
+
+  - name: Show returned object
+    debug:
+      var: my_date
+# The returned object will display all the properties 
+
+# ok: [3.236.168.204] => {
+#     "my_date": {
+#         "changed": true,
+#         "cmd": "date",
+#         "delta": "0:00:00.004210",
+#         "end": "2026-02-07 16:06:43.295399",
+#         "failed": false,
+#         "msg": "",
+#         "rc": 0,
+#         "start": "2026-02-07 16:06:43.291189",
+#         "stderr": "",
+#         "stderr_lines": [],
+#         "stdout": "Sat Feb  7 16:06:43 UTC 2026",
+#         "stdout_lines": [
+#             "Sat Feb  7 16:06:43 UTC 2026"
+#         ]
+#     }
+# }
+
+  - name: Display just the output
+    debug:
+      var: "Today is: {{my_date.stdout}}"

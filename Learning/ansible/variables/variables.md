@@ -202,3 +202,13 @@ Ansible automatically creates magic variables to reflect its internal state.
 ```
 Connection variables control how Ansible connects to remote hosts during playbook execution. They define the connection type, user, and other related settings.
 ```
+
+
+## --extra-vars (cli option)
+
+```shell
+ansible-playbook playbook_name.yaml --extra-vars "Variable='My value'" 
+
+# Example
+ansible-playbook set_config_ip.yaml --extra-vars "ip='10.10.10.3'" 
+```
