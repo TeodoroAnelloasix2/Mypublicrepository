@@ -1,0 +1,50 @@
+---
+- name: Working with file
+  hosts: ubuntu_server
+  vars:
+    my_file: 
+      name: /tmp/test1.txt
+      perm: '0750'
+      own: ansible
+
+  tasks:
+  - name: Create file
+    file: 
+      path: "{{my_file['name']}}"
+      state: "touch"
+  
+  - name: Set file permissions
+    file:
+      path: "{{my_file['name']}}"
+      owner: "{{my_file['own']}}"
+      group: "{{my_file['own']}}"
+      mode: "{{my_file['perm']}}"
+
+
+- name: Work with directories
+  hosts: ubuntu_server
+  vars:
+    my_dir: '/tmp/dir1'
+  
+  tasks:
+  - name: Create directory
+    file:
+      path: "{{my_dir}}"
+      state: directory
+      mode: 0740  
+
+- name: Delete resources
+  hosts: ubuntu_server
+  vars:
+    my_file: '/tmp/test1.txt'
+    my_dir: '/tmp/dir1'
+
+  tasks:  
+  - name: Delete file
+    file: 
+      path: "{{my_file}}"
+      state: absent
+  - name: Delete directory
+    file:
+      path: "{{my_dir}}"
+      state: absent

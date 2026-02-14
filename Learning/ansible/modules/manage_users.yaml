@@ -1,0 +1,21 @@
+---
+- name: Manage users and groups
+  hosts: aws_linux
+  become: true
+  become_user: root
+  tasks:
+  
+  - name: Create simple user
+    user:
+      name: user1
+
+  - name: Create group
+    group:
+      name: group1 
+
+  - name: Create user2 with more features
+    user:
+      name: usuer2
+      shell: /bin/bash
+      group: group1
+      home: /home/usuario2

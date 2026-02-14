@@ -1,0 +1,84 @@
+---
+- name: Install tomcat 10
+  hosts: redhat_srv
+  vars:
+    source_url: 'https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.52/bin/apache-tomcat-10.1.52.tar.gz'
+  become: true
+  become_user: root
+
+  tasks:
+  
+  - name: Create tomcat group 
+    group:
+      name: tomcat
+  
+  
+  - name: Create tomcat user 
+    user:
+      name: tomcat
+      group: tomcat
+      shell: /bin/false
+      home: /opt/tomcat
+      system: yes
+ 
+# sudo yum list available \*openjdk\*
+  - name: Install JAVA
+    yum:
+      name: java-21-openjdk.x86_64 
+      state: present
+      update_cache: true
+
+  - name: Create tomcat directory
+    file:
+      path: '/opt/tomcat'
+      owner: tomcat
+      group: tomcat
+      mode: '0755'
+      state: directory
+      recurse: yes
+
+  - name: Get tomcat executable 
+    unarchive:
+      src: "{{source_url}}"
+      dest: '/opt/tomcat'
+      remote_src: yes
+      extra_opts: [--strip-components=1]
+      owner: tomcat
+      group: tomcat
+      mode: '0755'
+  
+  - name: Ensure permissions
+    file:
+      path: /opt/tomcat
+      owner: tomcat
+      group: tomcat
+      recurse: yes
+  
+  - name: manage tomcat service 
+    copy:
+      content: |-
+        [Unit]
+        Description=Tomcat service
+        Requires=network.target
+        After=network.target
+
+        [Service]
+        Type=forking
+        User=tomcat
+        Environment="CATALINA_PID=/opt/tomcat/logs/tomcat.pid"
+        Environment="CATALINA_BASE=/opt/tomcat"
+        Environment="CATALINA_HOME=/opt/tomcat"
+        Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+        ExecStart=/opt/tomcat/bin/startup.sh
+        ExecStop=/opt/tomcat/bin/shutdown.sh
+        Restart=on-abnormal
+
+        [Install]
+        WantedBy=multi-user.target
+      dest: /etc/systemd/system/tomcat.service
+  
+  - name: Enable and start tomcat
+    systemd:
+      name: tomcat
+      state: started
+      enabled: yes

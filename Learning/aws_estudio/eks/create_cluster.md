@@ -49,7 +49,7 @@ aws ec2 describe-key-pairs --key-names kube-demo --region us-east-1
 ```sh
 eksctl create nodegroup --cluster=eksdemo1 \
     --region=us-east-1 \
-    --name=eksdemo1-ng-publuc1 \
+    --name=eksdemo1-ng-public2 \
     --node-type=t3.medium \
     --nodes=2 \
     --nodes-min=2 \

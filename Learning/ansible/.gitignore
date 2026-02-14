@@ -5,4 +5,5 @@ master_key/*
 */inventory.ini
 .vscode
 */.vscode
+modules/ansible.cfg
 variables/info_mysql.json
