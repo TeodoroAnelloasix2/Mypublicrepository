@@ -50,5 +50,6 @@ scripts = {
 
 my_ec2_type = "t3.micro"
 
+
 ubuntu_init_script = "ubuntu_init.sh"
 aws_init_script    = "aws_init.sh"

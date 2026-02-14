@@ -82,3 +82,23 @@
       name: tomcat
       state: started
       enabled: yes
+
+
+- name: Deploy firts web app
+  hosts: redhat_srv
+
+  become: true
+  become_user: root
+
+  tasks:
+  - name: Copy war file into tomcat
+    ansible.builtin.copy:
+      src: ./webapp/app1.war
+      dest: /opt/tomcat/webapps
+  
+  - name: Set permissions
+    file:
+      path: /opt/tomcat/webapps/app1.war
+      owner: tomcat
+      group: tomcat
+      mode: 0775

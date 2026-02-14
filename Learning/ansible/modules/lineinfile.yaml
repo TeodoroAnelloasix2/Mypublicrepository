@@ -1,0 +1,29 @@
+---
+- name: Lineinfile Module
+  hosts: all 
+
+  tasks:
+  - name: Create sample example file 
+    ansible.builtin.copy:
+      content: |-
+        line 1
+        line 2
+        line 3
+      dest: /tmp/example.txt
+  
+  - name: write line into the file
+    ansible.builtin.lineinfile:
+      path: /tmp/example.txt
+      line: line 4
+  
+  - name: modify spefic line
+    ansible.builtin.lineinfile:
+      path: /tmp/example.txt
+      search_string: line 1
+      line: Line 1 have been modified
+  
+  - name: Delete content
+    ansible.builtin.lineinfile:
+      path: /tmp/example.txt
+      regexp: '^line\s+4$'
+      state: absent

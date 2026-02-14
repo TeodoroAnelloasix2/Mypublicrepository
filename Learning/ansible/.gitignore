@@ -6,4 +6,5 @@ master_key/*
 .vscode
 */.vscode
 modules/ansible.cfg
+modules/webapp/*.war
 variables/info_mysql.json
