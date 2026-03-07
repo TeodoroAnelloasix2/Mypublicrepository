@@ -1,0 +1,11 @@
+---
+- name: Ignore unreacheble servers
+  hosts: ubuntu_so
+  ignore_unreachable: true # Ignore errors generated from unreacheble servers
+  tasks:
+
+  - name: Gather servers information
+    ansible.builtin.debug:
+      msg:  "Response from: {{ ansible_facts['hostname'] }}"
+    when: ansible_facts['hostname'] !=""
+    ignore_unreachable: true

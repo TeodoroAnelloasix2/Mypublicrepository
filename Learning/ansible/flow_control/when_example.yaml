@@ -1,0 +1,17 @@
+---
+- name: Generate a file in a empty directory
+  hosts: all
+
+  tasks:
+  - name: Get directory info
+    command:
+      cmd: ls /home/ansible
+    register: resultado
+
+  
+  - name: Create file if is it an empty directory
+    file:
+      path: /home/ansible
+      state: touch
+    when: resultado.stdout==""
+    

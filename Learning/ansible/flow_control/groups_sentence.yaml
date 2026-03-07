@@ -1,0 +1,14 @@
+--- 
+- name: Loop with groups sentence
+  hosts: all
+
+  tasks:
+  - name: Display all hosts included in our inventory
+    debug:
+      msg: "server: {{item}}"
+    loop: "{{groups['all']}}" # groups['all'] we can display all the servers 
+  
+  - name: Display hosts in a specified group 
+    debug: 
+      msg: "server: {{item}}"
+    loop: "{{groups['redhat_srv']}}"

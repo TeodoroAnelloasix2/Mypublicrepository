@@ -1,0 +1,23 @@
+# When: conditional expression in Ansible
+# It is a Jinja2 expression
+
+# Available operators: < > >= <= != ==
+# "is defined" is used to check if a variable exists
+# "not" is used for negation
+# "in" is used to search for an element in a given list
+---
+- name:
+  hosts: all
+
+  tasks:
+  - name: Get date
+    shell:
+      cmd: date
+    register: today_is
+    when: ansible_distribution=='Ubuntu' or ansible_facts['distribution']=='RedHat' # To gather info: ansible target_hosts -m setup  | grep distribution
+
+  - name: Show date
+
+    debug:
+      msg: "{{today_is.stdout}}"
+    when: ansible_distribution=='Ubuntu' or ansible_facts['distribution']=='RedHat' 

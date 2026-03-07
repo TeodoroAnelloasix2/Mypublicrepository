@@ -8,3 +8,4 @@ master_key/*
 modules/ansible.cfg
 modules/webapp/*.war
 variables/info_mysql.json
+*/*.log

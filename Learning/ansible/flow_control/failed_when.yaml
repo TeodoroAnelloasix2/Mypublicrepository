@@ -1,0 +1,12 @@
+---
+- name: Failed when example
+  hosts: ubuntu_so
+  tasks:
+  - name: Locate specified directory
+    command:
+      cmd: ls /home/ansible
+    register: salida
+    failed_when: salida.rc==0
+  - name: Display output
+    ansible.builtin.debug:
+      msg: "{{salida}}"

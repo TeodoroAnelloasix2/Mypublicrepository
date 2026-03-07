@@ -1,0 +1,15 @@
+---
+- name: Ignore errors example
+  hosts: ubuntu_so
+  
+  tasks:
+  - name: Read incorrect directory
+    command:
+      cmd: ls /invented_dir
+    register: result
+    ignore_errors: true # We can ignore the error so the playbook will not be interrupted
+
+  - name: Display result
+    debug:
+      msg: "{{result.stderr}}"
+    when: result.stderr !=""

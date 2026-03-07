@@ -1,0 +1,43 @@
+---
+- name: Install php 7.4
+  hosts: ubuntu_so
+
+  become: true
+  become_user: root
+
+  tasks:
+  - name: install gpg
+    apt:
+      name: gpg
+  
+  - name: Update php repository
+    shell:
+      cmd: add-apt-repository ppa:ondrej/php -y
+  - name: Update apt cache
+    apt:
+      update_cache: true
+      force_apt_get: true
+  - name: Install old php version
+    apt:
+      name: php7.4
+
+- name: Update php 
+  hosts: ubuntu_so
+
+  become: true
+  become_user: root
+
+  tasks:
+  - name: get php version
+    shell:
+      cmd: php -v | head -n 1 | awk '{print $2}'
+    register: php_version
+
+  - name: Display php version
+    debug:
+      msg: "Current php version: {{php_version.stdout}}"
+    
+  - name: Get php 8.1
+    apt:
+      name: php8.1
+    when: php_version.stdout !="8.1"

@@ -1,0 +1,24 @@
+---
+- name: Test set fact 
+  hosts: ubuntu_server
+
+  tasks:
+  - name: Create fact variable
+    set_fact:
+      cacheable: true
+      fichero: desarrollo.txt
+  
+  - name: Create file using my own fact variable
+    ansible.builtin.file:
+      path: /tmp/{{fichero}}
+      state: touch
+
+  
+  - name: Create my own hostname variable 
+    set_fact:
+      cacheable: true
+      nombre_host: "{{ansible_facts['hostname'] | upper }}"
+
+  - name: Show hostname   
+    debug:
+      msg: "Result hostname: {{nombre_host}}"

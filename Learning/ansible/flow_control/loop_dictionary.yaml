@@ -1,0 +1,25 @@
+---
+- name: Loop with dictionary, dict2items
+  hosts: mysql
+  
+  tasks:
+  - name: dict2items loop with dictionary
+    vars:
+      entorno:
+        nombre: desarrollo
+        responsable: Italianodevops
+        personas: 10
+    debug:
+      msg: "Key: {{item.key}} Value: {{item.value}}"
+    loop: "{{entorno | dict2items}}" # With pipe we can use a filter to change data type
+
+
+  - name: with_dict loop
+    vars:
+      entorno2:
+        nombre: integracion
+        responsable: Italianodevops
+        personas: 5
+    debug:
+      msg: "Key: {{item.key}} Value: {{item.value}}"
+    with_dict: "{{entorno2 }}" # With_dict  loop work correctly with dictionary type
