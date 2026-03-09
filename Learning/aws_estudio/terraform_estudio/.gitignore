@@ -16,3 +16,9 @@ ansible_infra/ubuntu_init.sh
 */inventory.yaml
 */inventory.ini
 
+modules/*/.terraform
+modules/*/.terraform.lock.hcl
+modules/*/terraform.tfstate
+modules/*/terraform.tfstate.backup
+
+backend_lambda/lambda/function.zip
