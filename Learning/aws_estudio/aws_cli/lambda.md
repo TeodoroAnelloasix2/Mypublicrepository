@@ -28,11 +28,11 @@
 ```sh
 aws iam create-role \
   --role-name lambda-assumerole \
-  --assume-role-policy-document ./trust-policy.json
+  --assume-role-policy-document file://trust-policy.json
 ```
 ### 3 Add permissions 
 ```sh
-# This permissions give at function the minimum necesary permissions to execte it self  
+# This permissions give at function the minimum necesary permissions to execte it self  (aws cloud watch)
 aws iam attach-role-policy --role-name lambda-assumerole --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 ```
 
