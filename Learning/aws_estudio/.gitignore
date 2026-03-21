@@ -1,3 +1,6 @@
 my_key_pair/*
 .infracost
 aws_cli/trust-policy.json
+aws_cli/my-function.zip
+aws_cli/lambda_alb_py.zip
+aws_cli/*.json
