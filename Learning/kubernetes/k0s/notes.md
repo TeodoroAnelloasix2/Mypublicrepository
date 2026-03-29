@@ -2,6 +2,11 @@
 
 ### Start
 
+###### To deploy infra on cloud using terraform
+```sh 
+https://github.com/TeodoroAnelloasix2/Mypublicrepository/tree/main/Learning/aws_estudio/terraform_estudio/k0s_infra
+```
+
 ```sh
 k0sctl apply --config ./k0s/k0sctl.yaml
 ```
