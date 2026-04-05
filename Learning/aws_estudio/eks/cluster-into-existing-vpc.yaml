@@ -1,0 +1,19 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cluster-existing-vpc
+  region: us-east-1
+vpc:
+  subnets:
+    public:
+      us-east-1a: {id: "subnet-xxxxxxx"}
+      us-east-1b: {id: "subnet-xxxxxxx"}
+      us-east-1c: {id: "subnet-xxxxxxx"}
+nodeGroups:
+  - name: cluster-existing-vpc-ng-1
+    instanceType: t3.small
+    desiredCapacity: 1
+  - name: cluster-existing-vpc-ng-2
+    instanceType: t3.small
+    desiredCapacity: 2

@@ -1,17 +1,44 @@
-# Create cluster with eksctl
+# EKS Cluster
 
+## Manage Cluster eksctl
+
+![alt text](AWS_EKS_Architecture_Diagram.png)
 
 ### To create cluster
 ```shell
-eksctl create cluster --name=eksdemo1 \
---region=us-east-1 \
---zones=us-east-1a,us-east-1b \
---without-nodegroup
+eksctl create cluster --name=simple-cluster \
+--region=eu-south-2 \
+--nodes=1 --nodes-type t3.small
 ```
+
+### Create cluster yaml file
+
+```yaml
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: simple-cluster2
+  region: us-east-1
+
+nodeGroups:
+  - name: simple-cluster2-ng-1
+    instanceType: t3.small
+    desiredCapacity: 1
+  - name: simple-cluster2-ng-2
+    instanceType: t3.small
+    desiredCapacity: 2
+```
+```sh
+eksctl create cluster -f cluster.yaml
+```
+
 ### To delete cluster
 
 ```shell
-eksctl delete cluster --name=eksdemo1 --region=us-east-1
+eksctl delete cluster --name=<cluster-name> --region=<region>
+
+eksctl delete cluster --name=<cluster-name> --region=<region> --disable-nodegroup-eviction
 ```
 
 
@@ -20,66 +47,46 @@ eksctl delete cluster --name=eksdemo1 --region=us-east-1
 eksctl get cluster
 ```
 
-### To create IAM OIDC provider
-
-```sh
-# Setup IAM OIDC provider for a cluster to enable IAM roles for pods
-eksctl utils associate-iam-oidc-provider   --region us-east-1 \
---cluster eksdemo1 --approve
-```
-
-### To create ec2 key-pair
-
-```sh
-# Create ec2 key-pair
-
-aws ec2 create-key-pair \
-  --key-name kube-demo \
-  --key-type ed25519 \
-  --query 'KeyMaterial' \
-  --output text  > my_key_pair/kube-demo.pem
-
-# Ensure the was succesfully created 
-
-aws ec2 describe-key-pairs --key-names kube-demo --region us-east-1
-
-```
-### To create node group 
-
-```sh
-eksctl create nodegroup --cluster=eksdemo1 \
-    --region=us-east-1 \
-    --name=eksdemo1-ng-public2 \
-    --node-type=t3.medium \
-    --nodes=2 \
-    --nodes-min=2 \
-    --nodes-max=4 \
-    --node-volume-size=20 \
-    --ssh-access \
-    --ssh-public-key=kube-demo \
-    --managed \
-    --asg-access \
-    --external-dns-access \
-    --full-ecr-access \
-    --appmesh-access \
-    --alb-ingress-access
-```
-
-### To get nodegroup info
-```sh
-eksctl get nodegroup --cluster=eksdemo1
-```
-### To delete nodegroup
-```
-eksctl delete nodegroup \
-  --cluster=eksdemo1 \
-  --region=us-east-1 \
-  --name=eksdemo1-ng-publuc1
-```
-
 
 ### To display context info
 
 ```sh
+kubectl config view 
 kubectl config view --minify
 ```
+
+### Get current context and modify context 
+
+```sh
+kubectl config current-context
+kubectl config use-context italianodevops@simple-cluster.eu-south-2.eksctl.io
+```
+
+### To get nodegroup info
+```sh
+eksctl get nodegroup --cluster=<cluster-name>
+```
+
+## Manage Nodegroup
+
+### Add nodegroup
+
+```javascript
+we can add a nogroup by modifiy the yaml file or through cli command
+```
+```yaml
+nodeGroups: # Nodegroups magaged by our self
+  - name: our-self-ng-2
+    instanceType: t3.small
+    desiredCapacity: 2
+```
+```sh
+eksctl create nodegroup --config-file managed-nodegroups.yaml 
+eksctl create nodegroup --cluster=<cluster-name> --name <ng-name> --node-type t3.small --nodes 1 --managed=false
+```
+
+### Delete nodegroup
+```sh
+eksctl delete nodegroup --cluster=<cluster-name> --name <ng-name> 
+```
+
