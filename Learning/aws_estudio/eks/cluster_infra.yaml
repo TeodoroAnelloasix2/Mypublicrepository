@@ -1,0 +1,17 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: italianodevops-cluster1
+  region: eu-south-2
+
+managedNodeGroups: # Nodegroups managed by aws
+  - name: ng-1
+    instanceType: t3.small
+    minSize: 2
+    maxSize: 5
+
+nodeGroups: # Nodegroups magaged by our self
+  - name: ng-2
+    instanceType: t3.small
+    desiredCapacity: 2

@@ -1,0 +1,20 @@
+---
+- name: Testing groups sentence in a loop
+  hosts: ubuntu_so
+
+  tasks:
+  - name: Display inventory hosts
+    ansible.builtin.debug:
+      msg: "Host: {{item}}" 
+    loop: "{{groups['ubuntu_so']}}"  # groups sentence allows the user to iterate across the hosts which are presents in the specified group
+    register: result_output
+
+  - name: Dumb output into result file 
+    ansible.builtin.copy:
+      content: "{{result_output}}"
+      dest: /tmp/res.txt
+
+  - name: Fetch the result file 
+    ansible.builtin.fetch:
+      src: /tmp/res.txt
+      dest: /tmp

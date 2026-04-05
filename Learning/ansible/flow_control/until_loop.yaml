@@ -1,0 +1,19 @@
+---
+- name: Delete users with until loop
+  hosts: mysql
+  vars_files: ./usuarios_vars.yaml
+
+  tasks: 
+  - name: Delete users
+    become: true
+    become_user: root
+
+    ansible.builtin.shell:
+      cmd: userdel {{item}}_{{i}}
+    loop: "{{users_list}}"
+
+    loop_control:
+      index_var: i
+    until: i > 1
+    retries: 5
+    delay: 2

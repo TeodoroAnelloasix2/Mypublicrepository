@@ -1,0 +1,29 @@
+--- 
+- name: Create users with loop
+  hosts: mysql
+  vars_files: ./usuarios_vars.yaml
+  tasks:
+  - name: Create users
+    become: true
+    become_user: root
+    ansible.builtin.user:
+      name: "{{item}}_{{i}}"
+      state: present
+    loop: "{{users_list}}"
+    loop_control:
+      index_var: i
+
+  - name: Display user index
+    debug:
+      msg: "User: {{i}}  {{item}}_{{i}}"
+    loop: "{{users_list}}"
+    loop_control:   # loop_control, get the index of current item
+      index_var: i   
+  
+  - name: when condition with loop
+    debug:
+      msg: "The user {{item }} is the number 2  --> {{i}}"
+    loop: "{{users_list}}"
+    loop_control:
+      index_var: i
+    when: i == 2
