@@ -129,6 +129,7 @@ kubectl create -f Nginx.yml
 ```shell
 #Una vez creado el pod:
 #Exponer el servicio
+kubectl expose pod <podname> --name <service-name> --port=80 --type=<Service-type> 
 kubectl expose pod pod-nginx-yml --name pod-nginx-yml-svc --port=80 --type=LoadBalancer #El puerto ha de ser el del expose de la imagen 
 #Get info
 kubectl get svc pod-nginx-yml-svc -o wide
@@ -249,17 +250,33 @@ kubectl get pod tomcat-lab -o jsonpath={.metadata.annotations} | jq
 
 # Deployments
 
-```
+```javascript
 Gestiona los despliegues de nuestras aplicaciones
 Al crear un deployment se lanza:
 
-  - deployment
-     |
-     |_
-       replica sets
-          |
-          |_ 
-            pods
++------------------------------------------------------+
+|                     Deployment                       |
+|              (desired state / strategy)              |
+|                                                      |
+|   +----------------------------------------------+   |
+|   |                 ReplicaSet                   |   |
+|   |          (ensures pod replicas)              |   |
+|   |                                              |   |
+|   |   +---------------+  +---------------+       |   |
+|   |   |      Pod      |  |      Pod      |       |   |
+|   |   |---------------|  |---------------|       |   |
+|   |   |  Container    |  |  Container    |       |   |
+|   |   |  (your app)   |  |  (your app)   |       |   |
+|   |   +---------------+  +---------------+       |   |
+|   |                                              |   |
+|   |   +---------------+                          |   |
+|   |   |      Pod      |                          |   |
+|   |   |---------------|                          |   |
+|   |   |  Container    |                          |   |
+|   |   |  (your app)   |                          |   |
+|   |   +---------------+                          |   |
+|   +----------------------------------------------+   |
++------------------------------------------------------+
 ```
 
 ```shell

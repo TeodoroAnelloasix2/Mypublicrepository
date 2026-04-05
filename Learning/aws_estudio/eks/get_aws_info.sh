@@ -5,3 +5,5 @@ SECURITY_GROUP_ID=$(aws ec2 describe-instances  --region <region> --query "Reser
 
 
 aws ec2 authorize-security-group-ingress --group-id $SECURITY_GROUP_ID --protocol "tcp" --port $SERVICE_NODE_PORT --cidr 0.0.0.0/0 --region eu-south-2
+
+aws ec2 revoke-security-group-ingress --group-id $SECURITY_GROUP_ID --protocol "tcp" --port $SERVICE_NODE_PORT --cidr 0.0.0.0/0 --region eu-south-2
