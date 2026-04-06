@@ -308,3 +308,55 @@ deployment.apps/nginx-wkloads scaled
 kubectl get pods -n kubernetes-dashboard
 kubectl logs -n kubernetes-dashboard  mykubernetes-dashboard-xxxxxxxxxx
 ```
+
+
+## Update image
+
+```sh
+kubectl create deployment deploy-example --image=nginx:1.24.0 --replicas=2
+kubectl set image deployment deploy-example nginx=nginx:1.25.0
+
+kubectl rollout status  deployment deploy-example # to check update status
+kubectl rollout history  deployment deploy-example # See update history
+
+kubectl rollout undo deployment deploy-example                   # Perform downgrade
+kubectl rollout undo deployment deploy-example  --to-revision=1  # Perform downgrade to specified revision
+```
+
+
+```sh
+kubectl rollout history  deployment deploy-example --revision=1
+
+deployment.apps/deploy-example with revision #1
+Pod Template:
+  Labels:       app=deploy-example
+        pod-template-hash=56ddfcdcdc
+  Containers:
+   nginx:
+    Image:      nginx:1.24.0
+    Port:       <none>
+    Host Port:  <none>
+    Environment:        <none>
+    Mounts:     <none>
+  Volumes:      <none>
+  Node-Selectors:       <none>
+  Tolerations:  <none>
+
+kubectl rollout history  deployment deploy-example --revision=2
+
+deployment.apps/deploy-example with revision #2
+Pod Template:
+  Labels:       app=deploy-example
+        pod-template-hash=6964cd94c4
+  Containers:
+   nginx:
+    Image:      nginx:1.25.0
+    Port:       <none>
+    Host Port:  <none>
+    Environment:        <none>
+    Mounts:     <none>
+  Volumes:      <none>
+  Node-Selectors:       <none>
+  Tolerations:  <none>
+
+```

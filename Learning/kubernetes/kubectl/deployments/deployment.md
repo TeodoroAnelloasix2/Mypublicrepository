@@ -63,3 +63,33 @@ SECURITY_GROUP_ID=$(aws ec2 describe-instances  --region <region> --query "Reser
 # Allow traffic
 aws ec2 authorize-security-group-ingress --group-id $SECURITY_GROUP_ID --protocol "tcp" --port $SERVICE_NODE_PORT --cidr 0.0.0.0/0 --region eu-south-2
 ```
+
+
+#### Expose pods through  LoadBalancer
+
+```sh
+kubectl describe svc <service-name> | grep -E 'Type:|LoadBalancer Ingress:'
+Type:                     LoadBalancer
+LoadBalancer Ingress:     xxxxxx-xxxxxxx.eu-south-2.elb.amazonaws.com
+```
+```sh
+curl http://xxxxxx-xxxxxxx.eu-south-2.elb.amazonaws.com:80
+
+# Output:
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, nginx is successfully installed and working.   <--
+Further configuration is required for the web server, reverse proxy, 
+API gateway, load balancer, content cache, or other features.</p>
+```

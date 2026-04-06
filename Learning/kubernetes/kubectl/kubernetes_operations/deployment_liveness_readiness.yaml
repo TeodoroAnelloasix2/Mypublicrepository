@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy-1
+  labels:
+    app: simple-nginx-app
+    maintainer: italianodevops
+    env: prod
+    tier: front
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simple-nginx-app
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: simple-nginx-app
+        env: prod
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 20
+            

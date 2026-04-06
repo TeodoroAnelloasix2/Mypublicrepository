@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy-1
+  labels:
+    app: simple-nginx-app
+    maintainer: italianodevops
+    env: prod
+    tier: front
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simple-nginx-app
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: simple-nginx-app
+        env: prod
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi" #~=67MB
+              cpu: "250m" # 250 miliCPU
+            limits:
+              memory: "128Mi"
+              cpu: "500m" # 1/2 vcpu core
