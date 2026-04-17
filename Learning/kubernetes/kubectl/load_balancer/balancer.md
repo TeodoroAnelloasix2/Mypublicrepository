@@ -38,7 +38,9 @@ curl http://a948703811ece451191a86f7faea82cc-608767358.eu-south-2.elb.amazonaws.
 
 
 ### Network load balancer
-
+```
+This LB work with TCP/UDP traffic 4 layer
+```
 ![alt text](network_load_balancer.jpg)
 
 ```sh
@@ -77,6 +79,10 @@ curl http://ab94e8ab4ae56439985d3029d86936a1-c05227d875b5e180.elb.eu-south-2.ama
 
 ![alt text](app_lb.webp)
 
+
+```
+This LB work with http/https  7 layer OSI
+```
 ```sh
 # Connect OpenId provider with  iam to configure permissions properly
 eksctl utils associate-iam-oidc-provider \
@@ -89,8 +95,8 @@ wget https://github.com/kubernetes-sigs/aws-load-balancer-controller/raw/refs/he
 
 # Create iam policiy 
 aws iam create-policy --policy-name my_alb_controller --policy-document file://iam_alb_policy.json
-
 ```
+
 ```json
 // Output
 {
@@ -204,4 +210,13 @@ kubectl describe ingress ingress-app
 kubectl describe ingress ingress-app | grep -i 'Address'
 
 curl http://appingress-xxxxx.eu-south-2.elb.amazonaws.com
+```
+
+
+```sh
+#Clean all resources
+aws iam delete-policy --policy-arn "arn:aws:iam::xxxx:policy/my_alb_controller"
+
+eksctl delete cluster --region eu-south-2 --name <cluster-name>
+
 ```

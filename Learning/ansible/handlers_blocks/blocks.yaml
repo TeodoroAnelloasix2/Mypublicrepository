@@ -1,0 +1,58 @@
+---
+- name: Install web server
+  hosts: all
+  become: true
+  become_user: root
+  tasks:
+  # Block 1 (Ubuntu distribution installation)
+  - name: install apache2
+    block:
+      - name: Install apache on ubuntu_server
+        ansible.builtin.apt:
+          name: apache2
+          state: present
+          update_cache: yes
+      - name: start web server apache
+        ansible.builtin.service:
+          name: apache2
+          state: started
+    when: ansible_facts['distribution'] | lower == 'ubuntu' # ansible -i inventory.yaml distribution -m setup --key-file ../master_key/ansible_key.pem -u ansible | grep -i distribution
+    ignore_errors: true
+
+  # Block 2 (RedHat distribution installation)
+  - name: install httpd
+    block:
+      - name: Install httpd on RedHat
+        ansible.builtin.dnf:
+            name:
+              - apache2
+              - mariadb-server
+            state: present
+            update_cache: yes
+        register: result
+      - name: Read invented file 
+        ansible.builtin.shell:
+          cmd:  "ls /inventend"
+        register: result
+
+    when: ansible_facts['distribution'] | lower == 'redhat'
+    ignore_errors: false
+    rescue: #List of tasks in a block that run if there is a task error in the main block list.
+    - name: "Show message error" 
+      debug:
+        msg: "Se ha producido un error: {{result.stderr}}"
+    - name: 
+      dnf:
+        name:
+          - httpd
+        state: present
+    always: #List of tasks, in a block, that execute no matter if there is an error in the block or not.
+    - name: Start services
+      service:
+        name: "{{ item }}"
+        state: started
+      loop:
+        - httpd
+        - mariadb-server
+    
+          

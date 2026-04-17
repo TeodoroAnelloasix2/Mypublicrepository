@@ -1,0 +1,31 @@
+---
+- name: Create backup
+  hosts: ubuntu_server
+
+  tasks:
+  
+  - name: Copy script into remote server 
+    ansible.builtin.copy:
+      src: backup.sh
+      dest: /tmp/backup.sh
+      mode: '0755'
+  
+  - name: Run background backup
+    ansible.builtin.shell: nohup /tmp/backup.sh </dev/null >/dev/null 2>&1 &
+
+  - name: Waiting backup end
+    shell:
+      cmd: cat /tmp/backup.end
+    register: result
+    until: result.stdout=="End"
+    retries: 6
+    delay: 10
+    notify:
+      - fetch_backup_file
+  
+  handlers:
+  - name: fetch_backup_file
+    ansible.builtin.fetch:
+      src: /tmp/copia.tar.gz
+      dest: ./copia.tar.gz
+      flat: true

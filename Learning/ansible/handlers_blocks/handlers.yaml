@@ -1,0 +1,32 @@
+### Handlers
+
+# Used to trigger a specific task
+# The task is triggered by notify command
+# It is executed last and it is runned only one time
+
+---
+- name: Handler example
+  hosts: ubuntu_server
+  become: true
+  become_user: root
+  tasks:
+  - name: Install apache 
+    ansible.builtin.apt:
+      update_cache: yes
+      name: 
+        - apache2
+      state: present
+
+  - name: Copy index.html
+    ansible.builtin.copy:
+      src: index.html
+      dest: /var/www/html
+    notify:
+      - reboot_apache
+  
+  handlers:
+  - name: reboot_apache
+    ansible.builtin.service:
+      
+      name: apache2
+      state: restarted

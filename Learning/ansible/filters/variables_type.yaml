@@ -1,0 +1,36 @@
+---
+- name: Example filters #https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_filters.html
+  hosts: ubuntu_server
+  vars:
+    string_1: "goodbye"
+    number_1: 1996
+    bool_type: true
+    list_1:
+      - "Lola"
+      - "Pepe"
+      - "John"
+    list_2: ["foo","bar"]
+    dict_pepe:
+      name: "Pepe"
+      age: 29
+      pet_numer: "3"
+  tasks:
+  - name: Get var type 
+    debug:
+      msg: "{{ item }} -> {{ vars[item] | type_debug }}"
+    loop:
+      - string_1
+      - number_1
+      - bool_type
+      - list_1
+      - list_2
+      - dict_pepe
+  - name: Convert to string
+    debug: 
+      msg: "Now {{vars['dict_pepe'].age | string }} is a string "
+  - name: Convert to number 
+    debug: 
+      msg: "Now {{ vars['dict_pepe'].pet_numer | int }} is a number"
+  - name: Lower & upper
+    debug:
+      msg: "{{ vars['string_1'] | upper }}" 
