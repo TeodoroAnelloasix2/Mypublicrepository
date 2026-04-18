@@ -1,0 +1,49 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for dev_install_db_role
+- name: Set MariaDB root password
+  community.mysql.mysql_user:
+    name: root
+    password: "{{mariadb_root_password}}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    priv: "*.*:ALL,GRANT"
+    state: present
+  ignore_errors: true
+  tags: setrootpassword 
+
+- name: Set App user 
+  community.mysql.mysql_user:
+    name: "{{app_user_name}}" 
+    host: "%"
+    password: "{{app_user_password}}"
+    priv: "customers.*:SELECT,UPDATE,CREATE,DELETE"
+    state: present
+    login_user: root
+    login_password: "{{mariadb_root_password}}"
+  tags: createappuser
+
+
+- name: Copy init db file 
+  ansible.builtin.copy:
+    src: "{{role_path}}/files/init_db.sql"
+    dest: /tmp/init_db.sql
+    mode: '0644'
+    
+- name:  Execute script
+  community.mysql.mysql_db:
+    name: "{{db_name}}"
+    state: import
+    target: "/tmp/init_db.sql"
+    login_user: root
+    login_password: "{{mariadb_root_password}}"
+  register: sql_result
+
+- name: Delete script
+  ansible.builtin.file:
+    path: "/tmp/init_db.sql"
+    state: absent
+
+
+- name: Flush privileges
+  ansible.builtin.command: mysql -u root -p"{{ wp_db_root_password }}" -e "FLUSH PRIVILEGES"
+  tags: flushprivileges

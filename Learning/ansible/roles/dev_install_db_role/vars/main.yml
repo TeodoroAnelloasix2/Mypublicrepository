@@ -1,0 +1,10 @@
+---
+# vars file for dev_install_db_role
+
+# Those are fakes data
+mariadb_root_password: "1234Example!"
+
+app_user_name: "app_user"
+app_user_password: "app_user"
+
+db_name: "customers"

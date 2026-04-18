@@ -1,0 +1,18 @@
+---
+- name: My role to install db
+  hosts: ubuntu_so
+  become: true
+  become_user: root
+  roles:
+    - dev_install_db_role # Execute tasks
+  
+
+  tasks: 
+  - name: Show health check results, Last task
+    ansible.builtin.debug:
+      msg: 
+        - "Health check status: {{ output_healthcheck.state }}"
+        - "Time elapsed: {{ output_healthcheck.elapsed }} seconds"
+        - "Port checked: 3306"
+    when: output_healthcheck is defined
+  

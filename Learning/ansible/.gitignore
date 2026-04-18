@@ -9,3 +9,4 @@ modules/ansible.cfg
 modules/webapp/*.war
 variables/info_mysql.json
 */*.log
+roles/dev_install_db_role/key/*

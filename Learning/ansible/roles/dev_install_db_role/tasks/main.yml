@@ -1,0 +1,42 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for dev_install_db_role
+- name: First role to install mariadb
+  ansible.builtin.apt:
+    name: mariadb-server
+    state: present
+    update_cache: true
+  when: 
+    - ansible_facts['distribution'] | lower == 'ubuntu' or ansible_facts['distribution'] | lower == 'debian'
+
+- name: Install python dependencies
+  ansible.builtin.import_tasks: install_py_dep.yaml
+
+- name: Start db 
+  ansible.builtin.service:
+    name: mariadb
+    state: started
+  when: 
+    - ansible_facts['distribution'] | lower == 'ubuntu' or ansible_facts['distribution'] | lower == 'debian'
+
+- name: Db health check
+  ansible.builtin.wait_for:
+    port: 3306
+    timeout: 60 #Seconds 
+    delay: 5
+  when: ansible_facts['distribution'] | lower == 'ubuntu' or ansible_facts['distribution'] | lower == 'debian'
+  register: output_healtcheck
+
+
+- name: Config db users
+  ansible.builtin.command: 
+    cmd: "echo 'Start handlers'"
+  changed_when: true 
+  notify:
+    - Set MariaDB root password
+    - Set App user
+    - Flush privileges
+    - Copy init db file
+    - Execute script
+    - Delete script
+
