@@ -1,0 +1,57 @@
+{# Dinamic web page #}
+
+{# Using variables #}
+
+<h1> Jinja template </h1> 
+
+<h3> Hi from {{ansible_hostname}} </h3>
+<h3>Python executable: {{ansible_python.executable }} </h3>
+<h3> Second processor: 
+{% if ansible_processor[2] is defined %}
+    {{ ansible_processor[2] }}
+{% else %}
+    Not available
+{% endif %}
+</h3>
+
+{# 
+ operators 
+ == != > < >= <=
+ 
+ conditions
+ if else endif
+#}
+
+{% if ansible_userspace_architecture == "x86_64" %}
+    <p>This is amd64 architecture {{ansible_userspace_architecture}} </p>
+{% else %}
+    <p>This is arm64 architecture {{ansible_userspace_architecture}} </p>
+{% endif %}
+
+
+{% if ansible_date_time.day | int < 15 or  ansible_date_time.year | int == 2026  %}
+    <p>Evaluating </p>
+        {% if ansible_date_time.day  | int < 15 %}
+            <p>We are in the first half of the month </p>
+        {% else %}
+            <p> We are in 2026 </p>
+        {% endif %}
+{% else %}
+    <p> Which day is today ? </p>
+{% endif %}
+
+
+{#
+Loop 
+
+for var in list
+    operations 
+endfor
+#}
+
+<h3> Processor data: </h3>
+<ol>
+{% for data in ansible_processor %}
+    <li> {{data}} </li>
+{% endfor %}
+</ol>

@@ -1,0 +1,9 @@
+--- 
+- name: Generate webpage using jinja2 template
+  hosts: mysql
+
+  tasks:
+  - name: Copy template
+    ansible.builtin.template:
+      src: template1.j2
+      dest: /tmp/webpage.html

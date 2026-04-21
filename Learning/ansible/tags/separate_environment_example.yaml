@@ -1,0 +1,33 @@
+---
+- name: Handle environment using tags
+  hosts: all
+
+  tasks:
+
+  - name: Preparing development environment
+    ansible.builtin.debug:
+      msg: "This is testing environments"
+    tags:
+      - development
+  
+  - name: Preparing production environment
+    debug:
+      msg: "This is production environments"
+    tags: production
+  
+  - name: Install bbdd development
+    debug: 
+      msg: "Install postgress"
+    tags: development
+
+  - name: Install bbdd prod 
+    ansible.builtin.debug:
+      msg: "Install oracle"
+    tags: production
+  
+  - name: Both environment
+    ansible.builtin.debug:
+      msg: "Installing antivirus on both environment"
+    tags:
+      - development
+      - production
