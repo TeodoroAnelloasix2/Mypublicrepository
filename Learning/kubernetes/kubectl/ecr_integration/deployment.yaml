@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-ecr
+  labels:
+    app: deployment-ecr
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-pod-go-app
+  template:
+    metadata:
+      labels: 
+        app: my-pod-go-app
+    spec:
+      containers:
+        - name: go-web-app-container
+          image:  281331456077.dkr.ecr.eu-south-2.amazonaws.com/simple-web-app:v1
+          ports: 
+            - containerPort: 8085

@@ -90,3 +90,24 @@ eksctl create nodegroup --cluster=<cluster-name> --name <ng-name> --node-type t3
 eksctl delete nodegroup --cluster=<cluster-name> --name <ng-name> 
 ```
 
+
+
+### Trouble shooting 
+
+ 
+```sh
+# List all stacks to identify the ones to delete
+aws cloudformation list-stacks --region eu-south-2 --query 'StackSummaries[?contains(StackName, `italianodevops-cluster1`)]' > output.json
+# We can check if we have some "DELETE_FAILED" resource
+
+# Delete nodegroup stacks first
+aws cloudformation delete-stack --region eu-south-2 --stack-name eksctl-italianodevops-cluster1-nodegroup-ng-1
+aws cloudformation delete-stack --region eu-south-2 --stack-name eksctl-italianodevops-cluster1-nodegroup-ng-2
+
+# Then delete the cluster stack
+aws cloudformation delete-stack --region eu-south-2 --stack-name eksctl-italianodevops-cluster1-cluster
+
+
+aws cloudformation continue-update-rollback --region eu-south-2 --stack-name eksctl-italianodevops-cluster1-cluster --resources-to-skip SubnetPublicEUSOUTH2B SubnetPublicEUSOUTH2C SubnetPublicEUSOUTH2A VPCGatewayAttachment
+
+```

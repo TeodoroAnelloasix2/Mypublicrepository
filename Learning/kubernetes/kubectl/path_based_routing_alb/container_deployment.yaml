@@ -1,0 +1,71 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: deployment-nginx
+  labels:
+    app: deployment-nginx
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-pod-nginx
+  template:
+    metadata:
+      labels:
+        app: my-pod-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: workdir
+          mountPath: /usr/share/nginx/html
+      initContainers:
+      - name: install
+        image: busybox
+        command: ["sh","-c","echo 'Hello from nginx' > /work-dir/index.html"]
+        volumeMounts:
+        - name: workdir
+          mountPath: "/work-dir"
+      volumes:
+      - name: workdir
+        emptyDir: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-httpd
+  labels: 
+    app: deployment-httpd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-pod-httpd
+  template:
+    metadata:
+      labels:
+        app: my-pod-httpd
+    spec:
+      containers:
+      - name: httpd 
+        image: httpd 
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: workdir2
+          mountPath: /usr/local/apache2/htdocs/httpd
+      initContainers:
+      - name: install
+        image: busybox
+        command: ["sh","-c","echo 'I am httpd server' > /work-dir/index.html"]
+        volumeMounts:
+        - name: workdir2
+          mountPath: "/work-dir"
+      volumes:
+      - name: workdir2
+        emptyDir: {}

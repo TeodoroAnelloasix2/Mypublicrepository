@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: web-app-ingress-class
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: ingress.k8s.aws/alb
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: go-app-ingress
+  labels:
+    app: go-app-ingress
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: go-app-ingress # ALB name
+    alb.ingress.kubernetes.io/scheme: internet-facing # Internet exposed
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP 
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-path: /hello
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
+    alb.ingress.kubernetes.io/success-code: '200'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '20'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '5'
+spec:
+  ingressClassName: web-app-ingress-class
+  rules:
+    - host: go-app-italianodevops.duckdns.org
+      http:
+        paths:
+          - path: / 
+            pathType: Prefix
+            backend: 
+              service: 
+                name: service-nodeport-go-web-app
+                port: 
+                  number: 8085

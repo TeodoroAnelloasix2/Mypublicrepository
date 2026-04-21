@@ -2,3 +2,5 @@ k0s/key/*
 k0s/k0sctl.yaml
 kubeconfig
 kubectl/get_helm.sh
+kubectl/ecr_integration/lifecycle-policy.json
+kubectl/ecr_integration/web-app/*

@@ -86,7 +86,7 @@ This LB work with http/https  7 layer OSI
 ```sh
 # Connect OpenId provider with  iam to configure permissions properly
 eksctl utils associate-iam-oidc-provider \
- --region <region>
+ --region <region> \
  --cluster <cluster-name> --approve 
 
 # Get policy
@@ -125,6 +125,7 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts \
   --approve
 
+--attach-policy-arn=$(aws iam list-policies --query "Policies[?contains(PolicyName, 'alb')]" | awk '/arn/ {print $NF}' | cut -d "," -f 1)
 
 helm repo add eks https://aws.github.io/eks-charts
 helm repo update
@@ -148,8 +149,15 @@ TEST SUITE: None
 NOTES:
 AWS Load Balancer controller installed!
 ```
-
+```javascript
+below we need
+1) IngressClass  app_alb_1.yaml
+2) A deployment (app to reach) nginx_deploy.yaml
+3) Nodeport  app_alb_2.yaml
+4) Ingress   app_alb_3.yaml
+```
 ```yaml
+# app_alb_1.yaml
 # https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
@@ -213,10 +221,126 @@ curl http://appingress-xxxxx.eu-south-2.elb.amazonaws.com
 ```
 
 
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                INTERNET                                     │
+└─────────────────────────────────┬───────────────────────────────────────────┘
+                                  │
+                                  │ HTTP Traffic
+                                  │
+┌─────────────────────────────────▼───────────────────────────────────────────┐
+│                          AWS REGION: eu-south-2                             │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                            VPC                                      │    │
+│  │                                                                     │    │
+│  │  ┌─────────────────────────────────────────────────────────────┐    │    │
+│  │  │                 APPLICATION LOAD BALANCER                   │    │    │
+│  │  │            appingress-750453496.eu-south-2.elb...           │    │    │
+│  │  │                                                             │    │    │
+│  │  │  AZ: eu-south-2a │ AZ: eu-south-2b │ AZ: eu-south-2c        │    │    │
+│  │  │  15.217.9.250    │ 15.216.168.33   │ 15.216.57.196          │    │    │
+│  │  └─────────────────────┬───────────────────────────────────────┘    │    │
+│  │                        │                                            │    │
+│  │                        │ Target Group                               │    │
+│  │                        │ Health Check: HTTP:80/                     │    │
+│  │                        │                                            │    │
+│  │  ┌─────────────────────▼───────────────────────────────────────┐    │    │
+│  │  │                    EKS CLUSTER                              │    │    │
+│  │  │              italianodevops-cluster1                        │    │    │
+│  │  │                                                             │    │    │
+│  │  │  ┌─────────────────────────────────────────────────────┐    │    │    │
+│  │  │  │                 INGRESS                             │    │    │    │
+│  │  │  │  Name: ingress-app                                  │    │    │    │
+│  │  │  │  Class: my-aws-ingress-class                        │    │    │    │
+│  │  │  │  Controller: ingress.k8s.aws/alb                    │    │    │    │
+│  │  │  └─────────────────┬───────────────────────────────────┘    │    │    │
+│  │  │                    │                                        │    │    │
+│  │  │  ┌─────────────────▼───────────────────────────────────┐    │    │    │
+│  │  │  │              NODEPORT SERVICE                       │    │    │    │
+│  │  │  │  Name: deploy-nodeport                              │    │    │    │
+│  │  │  │  Type: NodePort                                     │    │    │    │
+│  │  │  │  Port: 80 → TargetPort: 80                          │    │    │    │
+│  │  │  │  NodePort: 31258                                    │    │    │    │
+│  │  │  │  Selector: app=my-pod                               │    │    │    │
+│  │  │  └─────────────────┬───────────────────────────────────┘    │    │    │
+│  │  │                    │                                        │    │    │
+│  │  │                    │ Load Balance                           │    │    │
+│  │  │                    │                                        │    │    │
+│  │  │  ┌─────────────────▼──────────┐  ┌────────────────────────┐ │    │    │
+│  │  │  │         POD 1              │  │         POD 2          │ │    │    │
+│  │  │  │  IP: 192.168.69.230:80     │  │  IP: 192.168.9.114:80  │ │    │    │
+│  │  │  │  Labels: app=my-pod        │  │  Labels: app=my-pod    │ │    │    │
+│  │  │  │                            │  │                        │ │    │    │
+│  │  │  │  ┌──────────────────────┐  │  │  ┌──────────────────┐  │ │    │    │
+│  │  │  │  │    INIT CONTAINER    │  │  │  │  INIT CONTAINER  │  │ │    │    │
+│  │  │  │  │   busybox            │  │  │  │   busybox        │  │ │    │    │
+│  │  │  │  │   wget checkip.aws   │  │  │  │   wget checkip   │  │ │    │    │
+│  │  │  │  │   → /work-dir/       │  │  │  │   → /work-dir/   │  │ │    │    │
+│  │  │  │  └──────────────────────┘  │  │  └──────────────────┘  │ │    │    │
+│  │  │  │           │                │  │           │            │ │    │    │
+│  │  │  │           ▼                │  │           ▼            │ │    │    │
+│  │  │  │  ┌──────────────────────┐  │  │  ┌──────────────────┐  │ │    │    │
+│  │  │  │  │    NGINX CONTAINER   │  │  │  │  NGINX CONTAINER │  │ │    │    │
+│  │  │  │  │   Port: 80           │  │  │  │   Port: 80       │  │ │    │    │
+│  │  │  │  │   /usr/share/nginx/  │  │  │  │   /usr/share/    │  │ │    │    │
+│  │  │  │  │   html/index.html    │  │  │  │   nginx/html/    │  │ │    │    │
+│  │  │  │  │   Content: Your IP   │  │  │  │   Content: IP    │  │ │    │    │
+│  │  │  │  └──────────────────────┘  │  │  └──────────────────┘  │ │    │    │
+│  │  │  └────────────────────────────+  +────────────────────────┘ │    │    │
+│  │  │                                                             │    │    │
+│  │  │  Deployment: deployment-init                                │    │    │
+│  │  │  Replicas: 2                                                │    │    │
+│  │  │  Strategy: RollingUpdate                                    │    │    │
+│  │  └─────────────────────────────────────────────────────────────┘    │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              TRAFFIC FLOW                                   │
+│                                                                             │
+│  Internet → ALB → Target Group → NodePort Service → Pods                    │
+│                                                                             │
+│  1. User requests: http://appingress-750453496.eu-south-2.elb.amazonaws.com │
+│  2. ALB receives request on port 80                                         │
+│  3. ALB forwards to healthy targets (NodePort 31258)                        │
+│  4. NodePort service load balances to pods on port 80                       │
+│  5. Nginx serves content created by initContainer                           │
+│  6. Response: Your public IP (18.100.130.61)                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+```
+```
+Key Components Summary:
+
+🌐 Internet → ALB (3 AZs) → EKS Cluster → Ingress → NodePort Service → 2 Pods
+
+AWS Resources:
+
+    Region: eu-south-2
+    ALB: appingress (internet-facing)
+    EKS Cluster: italianodevops-cluster1
+    VPC: Spans 3 Availability Zones
+
+Kubernetes Resources:
+
+    IngressClass: my-aws-ingress-class
+    Ingress: ingress-app (with ALB annotations)
+    Service: deploy-nodeport (NodePort type)
+    Deployment: deployment-init (2 replicas)
+    Pods: nginx + busybox initContainer
+
+```
+
 ```sh
 #Clean all resources
 aws iam delete-policy --policy-arn "arn:aws:iam::xxxx:policy/my_alb_controller"
-
 eksctl delete cluster --region eu-south-2 --name <cluster-name>
+kubectl delete ingress ingress-app 
+kubectl delete ingressclass my-aws-ingress-class 
+kubectl delete service deploy-nodeport 
+kubectl delete deployment deployment-init 
 
 ```
+
+

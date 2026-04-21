@@ -27,3 +27,10 @@
     ]
 }
 ```
+
+
+```sh
+# Get iam arn by search pattern within the name
+aws iam list-policies --query "Policies[?contains(PolicyName, 'pattern here')]" | awk '/arn/ {print $NF}' 
+
+```
