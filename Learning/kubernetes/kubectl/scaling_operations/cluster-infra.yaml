@@ -1,0 +1,23 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: italianodevops-cluster1
+  region: eu-south-2
+
+managedNodeGroups: # Nodegroups managed by aws
+  - name: ng-1
+    instanceType: t3.small
+    minSize: 2
+    maxSize: 5
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+  
+addons:
+  - name: vpc-cni
+    podIdentityAssociations:
+      - namespace: kube-system
+        serviceAccountName: aws-node
+        permissionPolicyARNs:
+          - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy

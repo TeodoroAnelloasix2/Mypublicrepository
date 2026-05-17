@@ -3,16 +3,24 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: php-apache
 spec:
-  scaleTargetRef:
+  scaleTargetRef:  # Here we set the referred deployment
     apiVersion: apps/v1
     kind: Deployment
     name: php-apache
   minReplicas: 1
   maxReplicas: 5
   metrics:
+  #CPU usage
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
         averageUtilization: 50
+  #Memory usage
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 70
