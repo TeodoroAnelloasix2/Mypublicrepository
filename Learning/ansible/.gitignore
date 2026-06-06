@@ -1,5 +1,6 @@
 master_key/*
-
+infra/*.sh
+infra/authorized_keys
 */inventory.yaml
 */inventory
 */inventory.ini

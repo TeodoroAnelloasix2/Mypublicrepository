@@ -1,0 +1,7 @@
+---
+- name: Creating users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    password: "{{ item.pass | password_hash('sha512')}}" # pip install passlib
+  loop: "{{ usuarios }}"
+  

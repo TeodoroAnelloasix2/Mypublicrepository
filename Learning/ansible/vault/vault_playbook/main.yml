@@ -1,0 +1,10 @@
+---
+- name: Vault with roles
+  hosts: all
+  become: true
+  become_user: root
+  roles:
+    - using-vault
+  
+
+  # To decrypt vars file  and run role ansible-playbook main.yml  --ask-vault-pass

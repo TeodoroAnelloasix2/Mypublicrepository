@@ -1,0 +1,42 @@
+services:
+  base:
+    image: ansible-base-ubuntu:v1
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM ubuntu:24.04
+        RUN apt update && apt install -y openssh-server iproute2 iputils-ping net-tools sudo
+        RUN mkdir -p /script
+        RUN mkdir -p /var/run/sshd
+        WORKDIR /script 
+        COPY init.sh .
+        COPY authorized_keys .
+        RUN chmod +x *.sh
+        RUN ./init.sh
+        EXPOSE 22
+        CMD ["/usr/sbin/sshd", "-D"]
+  
+  node1:
+    image: ansible-base-ubuntu:v1
+    hostname:  node1
+    networks:
+      ansible_network:
+        ipv4_address: 192.168.0.12
+  node2:
+    image: ansible-base-ubuntu:v1
+    hostname:  node2
+    networks:
+      ansible_network:
+        ipv4_address: 192.168.0.11
+  node3:
+    image: ansible-base-ubuntu:v1
+    hostname:  node3
+    networks:
+      ansible_network:
+        ipv4_address: 192.168.0.10
+networks:
+  ansible_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
