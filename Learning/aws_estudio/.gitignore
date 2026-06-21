@@ -5,3 +5,4 @@ aws_cli/my-function.zip
 aws_cli/lambda_alb_py.zip
 aws_cli/*.json
 eks/*.json
+aws_cli/ec2/key-pair/*

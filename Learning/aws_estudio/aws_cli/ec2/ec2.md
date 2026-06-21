@@ -16,6 +16,16 @@ aws ec2 create-key-pair \
 
 aws ec2 describe-key-pairs --key-names kube-demo --region <region>
 
+aws ec2 describe-key-pairs  --query 'KeyPairs[?KeyName==`<keyname>`].KeyPairId' --output text --region <region>
+
+# Delete key pair
+
+aws ec2 delete-key-pair --key-pair-id $(aws ec2 describe-key-pairs  --query 'KeyPairs[?KeyName==`llave1`].KeyPairId' --output text) --region us-east-1
+{
+    "Return": true,
+    "KeyPairId": "key-001858fb7e6161a0b"
+}
+
 ```
 
 ### Create instance
