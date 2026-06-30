@@ -44,7 +44,12 @@ aws ec2 run-instances --image-id 'ami-0666fc3894c8795a8' \
  --private-dns-name-options '{"HostnameType":"ip-name","EnableResourceNameDnsARecord":true,"EnableResourceNameDnsAAAARecord":false}' \
  --count '1'
 
-# Describe sg
-aws ec2 describe-security-groups --group-ids sg-xxxxxxxxxxx --no-cli-pager --query "SecurityGroups[].IpPermissions[?FromPort==\`3000\`]"
+
 
 ```
+
+# Describe sg
+```sh
+aws ec2 describe-security-groups --group-ids sg-xxxxxxxxxxx --no-cli-pager --query "SecurityGroups[].IpPermissions[?FromPort==\`3000\`]"
+aws ec2 revoke-security-group-ingress --group-id 'sg-xxxxxx' --ip-permissions '{"FromPort":8000,"IpProtocol":"tcp","ToPort":8000,"IpRanges":[{"CidrIp":"1.2.3.4/32","Description":"Delete inbound rule from aws cli"}]}' 
+```sh
