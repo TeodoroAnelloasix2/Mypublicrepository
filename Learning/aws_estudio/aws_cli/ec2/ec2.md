@@ -42,6 +42,9 @@ aws ec2 run-instances --image-id 'ami-0666fc3894c8795a8' \
  --credit-specification '{"CpuCredits":"unlimited"}' --tag-specifications '{"ResourceType":"instance","Tags":[{"Key":"Name","Value":"test-ec2"}]}' \
  --metadata-options '{"HttpEndpoint":"enabled","HttpPutResponseHopLimit":2,"HttpTokens":"required"}' \
  --private-dns-name-options '{"HostnameType":"ip-name","EnableResourceNameDnsARecord":true,"EnableResourceNameDnsAAAARecord":false}' \
- --count '1' 
+ --count '1'
+
+# Describe sg
+aws ec2 describe-security-groups --group-ids sg-xxxxxxxxxxx --no-cli-pager --query "SecurityGroups[].IpPermissions[?FromPort==\`3000\`]"
 
 ```
